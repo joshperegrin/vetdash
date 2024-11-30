@@ -63,7 +63,6 @@ const app = Vue.createApp({
                 
                 switch (this.appointmentSearchFilter) {
                     case "appointmentID":
-                        debugger;
                         q = query(
                             collectionGroup(db, "appointments"),
                             where('appointmentID', '>=', this.appointmentSearchTerm),
@@ -185,12 +184,10 @@ const app = Vue.createApp({
                             this.appointmentlist.push(...querySnapshot2.docs.map(doc => doc.data()));
                         }
                         rowsCount += countSnapshot.data().count;
-                        debugger;
 
                     }))
                     
                 } else {
-                    debugger;
                     const querySnapshot = await getDocs(q);
                     this.appointmentlist = querySnapshot.docs.map(doc => doc.data())
                 }
