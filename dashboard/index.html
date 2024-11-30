@@ -64,12 +64,21 @@
                         <div class="card-header d-flex flex-row justify-content-between">
                             <button class="btn btn-outline-primary btn-sm text-nowrap"> <i class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
                             <div class="d-flex flex-row align-items-center gap-3">
-                                <input type="text" class="form-control form-control-sm">
-                                <select class="form-select-sm " style="width: 100px;" id="select-filters">
-                                    <option selected>Filter</option>
-                                    <option value="1">Option 1 </option>
-                                    <option value="2">Option 2</option>
-                                    <option value="3">Option 3</option>
+                                <input placeholder="Search Appointments" @change="fetchQuery()" v-model="appointmentSearchTerm" type="text" class="form-control form-control-sm">
+                                <select v-model="appointmentSearchFilter" class="form-select-sm " style="width: 150px;" id="select-filters">
+                                    <option value="appointmentID">Appointment ID </option>
+                                    <option value="dateTime">Date Scheduled</option>
+                                    <option value="createdAt">Date Created</option>
+                                    <option value="ownerName">Owner Name</option>
+                                    <option value="ownerEmail">Owner Email</option>
+                                    <option value="ownerContact">Owner Number</option>
+                                    <option value="preferredVet">Vet Booked</option>
+                                    <option value="status">Status</option>
+                                    <option value="petID">Pet ID </option>
+                                    <option value="breed">Pet Breed</option>
+                                    <option value="species">Pet Species</option>
+                                    <option value="dateOfBirth">Pet Birth Date</option>
+                                    <option value="petName">Pet Name</option>
                                 </select>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" role="switch"
@@ -78,7 +87,8 @@
                             </div>
                         </div>
                         <div class="card-body d-flex flex-column">
-                            <div v-for="appointment in appointmentlist"> {{appointment.dateTime}} </div>
+                            Search Term: "{{appointmentSearchTerm}}" <br> Search Filter: "{{appointmentSearchFilter}}"
+                            <div v-for="appointment in appointmentlist"> {{appointment}} </div>
                         </div>
                         <div class="card-footer">PAGES</div>
                     </div>
