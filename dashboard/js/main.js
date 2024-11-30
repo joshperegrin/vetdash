@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, collectionGroup, doc, getDoc, getCountFromServer } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
+import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, collectionGroup, doc, getCountFromServer, getDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCn5TPno8hTc1cM-Sm9vsrzkJn6VjKTyYM",
@@ -34,7 +34,7 @@ const app = Vue.createApp({
 
     methods: {
         async fetchQuery() {
-            
+
             if (this.appointmentSearchTerm == "") {
                 return
             }
@@ -60,7 +60,7 @@ const app = Vue.createApp({
                  */
 
                 let q;
-                
+
                 switch (this.appointmentSearchFilter) {
                     case "appointmentID":
                         q = query(
@@ -105,7 +105,6 @@ const app = Vue.createApp({
                     case "petID":
                         const collectionSnapshot = await getDocs(collection(db, "pets", this.appointmentSearchTerm, "appointments"));
                         this.appointmentlist = collectionSnapshot.docs.map(doc => doc.data());
-                        console.log(this.appointmentlist)
                         return;
                         break;
                     case "preferredVet":
@@ -139,7 +138,7 @@ const app = Vue.createApp({
                         break;
                     // case "gender":
                     //     break;
-                    case "petName": 
+                    case "petName":
                         q = query(
                             collection(db, "pets"),
                             where('petName', '>=', this.appointmentSearchTerm),
@@ -165,34 +164,53 @@ const app = Vue.createApp({
                     || this.appointmentSearchFilter == "dateOfBirth"
                     || this.appointmentSearchFilter == "petName"
                     || this.appointmentSearchFilter == "species") {
-                    
+
                     const querySnapshot = await getDocs(q);
 
                     let rowsCount = 0;
                     const pageLimit = 12;
                     this.appointmentlist = []
-                    await Promise.all(querySnapshot.docs.forEach(async (element) => {
-                        const appointmentsCollection = collection(db, "pets", element.id, "appointments");
+
+                    for (const doc of querySnapshot.docs) {
+                        const appointmentsCollection = collection(db, "pets", doc.id, "appointments");
                         const countSnapshot = await getCountFromServer(appointmentsCollection);
+                        let querySnapshot2;
 
                         if (countSnapshot.data().count + rowsCount <= pageLimit) {
-                            q = await getDocs(appointmentsCollection);
-                            this.appointmentlist.push(...q.docs.map(doc => doc.data()))
+                            querySnapshot2 = await getDocs(appointmentsCollection);
                         } else if (rowsCount < pageLimit) {
                             q = query(appointmentsCollection, orderBy("dateTime"), limit(pageLimit - rowsCount));
-                            const querySnapshot2 = await getDocs(q);
-                            this.appointmentlist.push(...querySnapshot2.docs.map(doc => doc.data()));
+                            querySnapshot2 = await getDocs(q);
                         }
-                        rowsCount += countSnapshot.data().count;
 
-                    }))
-                    
+                        for (const doc2 of querySnapshot2.docs) {
+                            let parent = await getDoc(doc2.ref.parent.parent);
+                            const parent_object = parent.data();
+                            let value = doc2.data();
+                            value['breed'] = parent_object.breed;
+                            value['dateOfBirth'] = parent_object.dateOfBirth;
+                            value['petName'] = parent_object.petName;
+                            value['species'] = parent_object.species;
+                            this.appointmentlist.push(value);
+                        }
+                    }
+
+                    rowsCount += countSnapshot.data().count;
                 } else {
+                    this.appointmentlist = [];
                     const querySnapshot = await getDocs(q);
-                    this.appointmentlist = querySnapshot.docs.map(doc => doc.data())
+                    for (const doc of querySnapshot.docs) {
+                        let parent = await getDoc(doc.ref.parent.parent);
+                        const parent_object = parent.data();
+                        let value = doc.data();
+                        value['breed'] = parent_object.breed;
+                        value['dateOfBirth'] = parent_object.dateOfBirth;
+                        value['petName'] = parent_object.petName;
+                        value['species'] = parent_object.species;
+                        this.appointmentlist.push(value);
+                    }
                 }
 
-                
             } catch (e) {
                 console.error(e)
             }
