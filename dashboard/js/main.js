@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, collectionGroup, doc, getCountFromServer, getDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
+import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, collectionGroup, doc, getCountFromServer, getDoc, addDoc, updateDoc} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCn5TPno8hTc1cM-Sm9vsrzkJn6VjKTyYM",
@@ -40,6 +40,7 @@ const app = Vue.createApp({
             }
             try {
                 /**
+                 * (String) appointmentID
                  * (Date) createdAt - date of booking of the appointment
                  * (Date) dateTime - schedule of the appointment
                  * (String) otherConcerns
@@ -52,6 +53,7 @@ const app = Vue.createApp({
                  * (Date) updatedAt
                  * (String) visitReason
                  * 
+                 * (String) petID
                  * (String) breed
                  * (Date) dateOfBirth
                  * (Boolean) gender [true = male, false = female]
@@ -217,9 +219,66 @@ const app = Vue.createApp({
                 console.error(e)
             }
 
+        },
+        
+        async addAppointment(appointmentMap){
+            let petsRef;
+
+            if(appointmentMap.petID == "" || !appointmentMap.petID){
+                petsRef = await addDoc(collection(db, "pets"), {
+                    breed: appointmentMap.breed,
+                    dateOfBirth: appointmentMap.dateOfBirth,
+                    gender: appointmentMap.gender,
+                    petName: appointmentMap.petName,
+                    species: appointmentMap.species,
+                });
+            } else {
+                petsRef = await getDoc(doc(db, "pets", appointmentMap.petID));
+            }
+
+            const appointmentRef = await addDoc(collection(db, "pets", petsRef.id, "appointments"), {
+                createdAt: appointmentMap.createdAt,
+                dateTime: appointmentMap.dateTime,
+                otherConcerns: appointmentMap.otherConcerns,
+                ownerAddress: appointmentMap.ownerAddress,
+                ownerContact: appointmentMap.ownerContact,
+                ownerEmail: appointmentMap.ownerEmail,
+                ownerName: appointmentMap.ownerName,
+                preferredVet: appointmentMap.preferredVet,
+                status: appointmentMap.status,
+                updatedAt: appointmentMap.updatedAt,
+                visitReason: appointmentMap.visitReason
+            });
+
+            await updateDoc(appointmentRef, {
+                appointmentID: appointmentRef.id
+            });
+            
+        },
+
+        addAppointmentOnClick(){
+            const appointmentMap1 = {
+                createdAt: new Date(2024, 11, 1),
+                dateTime: new Date(2024, 11, 1),
+                otherConcerns: "",
+                ownerAddress: "",
+                ownerContact: "",
+                ownerEmail: "maverinallysandrahidalgo@gmail.com",
+                ownerName: "mav",
+                preferredVet: "",
+                status: "",
+                updatedAt: "",
+                visitReason: "",
+                breed: "",
+                dateOfBirth: new Date(2024, 11, 1),
+                gender: "",
+                petName: "",
+                species: "",
+                petID: "",
+            }
+
+            this.addAppointment(appointmentMap1)
         }
-
-
     }
 })
 

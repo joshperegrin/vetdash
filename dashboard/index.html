@@ -62,7 +62,7 @@
                     <div class="fs-6 pb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, sit</div>
                     <div class="card d-flex flex-grow-1">
                         <div class="card-header d-flex flex-row justify-content-between">
-                            <button class="btn btn-outline-primary btn-sm text-nowrap"> <i class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
+                            <button class="btn btn-outline-primary btn-sm text-nowrap" @click="addAppointmentOnClick()"> <i class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
                             <div class="d-flex flex-row align-items-center gap-3">
                                 <input placeholder="Search Appointments" @change="fetchQuery()" v-model="appointmentSearchTerm" type="text" class="form-control form-control-sm">
                                 <select v-model="appointmentSearchFilter" class="form-select-sm " style="width: 150px;" id="select-filters">
