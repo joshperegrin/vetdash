@@ -191,6 +191,7 @@ const app = Vue.createApp({
                             value['dateOfBirth'] = parent_object.dateOfBirth;
                             value['petName'] = parent_object.petName;
                             value['species'] = parent_object.species;
+                            value['petID'] = parent.id
                             this.appointmentlist.push(value);
                         }
                     }
@@ -207,6 +208,7 @@ const app = Vue.createApp({
                         value['dateOfBirth'] = parent_object.dateOfBirth;
                         value['petName'] = parent_object.petName;
                         value['species'] = parent_object.species;
+                        value['petID'] = parent.id
                         this.appointmentlist.push(value);
                     }
                 }
