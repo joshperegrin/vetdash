@@ -133,9 +133,11 @@ const app = Vue.createApp({
                         );
                         break;
                     case "petID":
-                        const collectionSnapshot = await getDocs(collection(db, "pets", this.appointmentSearchTerm, "appointments"));
-                        this.appointmentlist = collectionSnapshot.docs.map(doc => doc.data());
-                        return;
+                        q = query(
+                            collection(db, "pets"),
+                            where('petID', '>=', this.appointmentSearchTerm),
+                            where('petID', '<=', this.appointmentSearchTerm + '\uf8ff')
+                        );
                         break;
                     case "preferredVet":
                         q = query(
@@ -208,7 +210,8 @@ const app = Vue.createApp({
                 if (this.appointmentSearchFilter == "breed"
                     || this.appointmentSearchFilter == "dateOfBirth"
                     || this.appointmentSearchFilter == "petName"
-                    || this.appointmentSearchFilter == "species") {
+                    || this.appointmentSearchFilter == "species"
+                    || this.appointmentSearchFilter == "petID") {
 
                     const querySnapshot = await getDocs(q);
 
