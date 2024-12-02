@@ -75,48 +75,57 @@
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Owner Contact</span>
-                                <input type="text" class="form-control" ref="ownerContact_Forms" name="ownerContact_Forms">
+                                <input type="text" class="form-control" ref="ownerContact_Forms"
+                                    name="ownerContact_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Owner Address</span>
-                                <input type="text" class="form-control" ref="ownerAddress_Forms" name="ownerAddress_Forms">
+                                <input type="text" class="form-control" ref="ownerAddress_Forms"
+                                    name="ownerAddress_Forms">
                             </div>
 
                             <br>
                             <div class="fs-5 mb-2"> Pet Details </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Name</span>
-                                <input type="text" class="form-control" ref="petName_Forms" name="petName_Forms" :disabled="petID_VALUE!=''">
+                                <input type="text" class="form-control" ref="petName_Forms" name="petName_Forms"
+                                    :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Date of Birth</span>
-                                <input type="date" class="form-control" ref="dateOfBirth_Forms" name="dateOfBirth_Forms" :disabled="petID_VALUE!=''">
+                                <input type="date" class="form-control" ref="dateOfBirth_Forms" name="dateOfBirth_Forms"
+                                    :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Gender</span>
-                                <select class="form-select" id="inputGroupSelect01" ref="gender_Forms" name="gender_Forms" :disabled="petID_VALUE!=''">
+                                <select class="form-select" id="inputGroupSelect01" ref="gender_Forms"
+                                    name="gender_Forms" :disabled="petID_VALUE!=''">
                                     <option value="true">Male</option>
                                     <option value="false">Female</option>
                                 </select>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Species</span>
-                                <input type="text" class="form-control" ref="species_Forms" name="species_Forms" :disabled="petID_VALUE!=''">
+                                <input type="text" class="form-control" ref="species_Forms" name="species_Forms"
+                                    :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Breed</span>
-                                <input type="text" class="form-control" ref="breed_Forms" name="breed_Forms" :disabled="petID_VALUE!=''">
+                                <input type="text" class="form-control" ref="breed_Forms" name="breed_Forms"
+                                    :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet ID</span>
-                                <input v-model="petID_VALUE" type="text" class="form-control" ref="petID_Forms" name="petID_Forms">
+                                <input v-model="petID_VALUE" type="text" class="form-control" ref="petID_Forms"
+                                    name="petID_Forms">
                             </div>
 
                             <br>
                             <div class="fs-5 mb-2"> Visit Details </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Preferred Vet</span>
-                                <input type="text" class="form-control" ref="preferredVet_Forms" name="preferredVet_Forms">
+                                <input type="text" class="form-control" ref="preferredVet_Forms"
+                                    name="preferredVet_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Date Schedule</span>
@@ -124,7 +133,8 @@
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Reason for Visit</span>
-                                <input type="text" class="form-control" ref="visitReason_Forms" name="visitReason_Forms">
+                                <input type="text" class="form-control" ref="visitReason_Forms"
+                                    name="visitReason_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Status</span>
@@ -138,13 +148,15 @@
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Other Concerns</span>
-                                <textarea class="form-control" ref="otherConcerns_Forms" name="otherConcerns_Forms"></textarea>
+                                <textarea class="form-control" ref="otherConcerns_Forms"
+                                    name="otherConcerns_Forms"></textarea>
                             </div>
 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" @click="addAppointmentOnClick()" data-bs-dismiss="modal">Add
+                            <button type="button" class="btn btn-primary" @click="addAppointmentOnClick()"
+                                data-bs-dismiss="modal">Add
                                 Appointment</button>
                         </div>
                     </div>
@@ -190,7 +202,32 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             Search Term: "{{appointmentSearchTerm}}" <br> Search Filter: "{{appointmentSearchFilter}}"
-                            <div v-for="appointment in appointmentlist"> {{appointment}} </div>
+                            <table class="table table-hover">
+                                <thead class="fw-bold">
+                                    <td>Appointment ID</td>
+                                    <td>Appointment Schedule</td>
+                                    <td>Status</td>
+                                    <td>Pet Name</td>
+                                    <td>Species</td>
+                                    <td>Breed</td>
+                                    <td>Owner Name</td>
+                                    <td>Owner Contact</td>
+                                    <td>Preferred Vet</td>
+                                    <td>Reason of Visit</td>
+                                </thead>
+                                <tr v-for="appointment in appointmentlist">
+                                    <td>{{appointment.appointmentID}}</td>
+                                    <td>{{appointment.dateTime}}</td>
+                                    <td>{{appointment.status}}</td>
+                                    <td>{{appointment.petName}}</td>
+                                    <td>{{appointment.species}}</td>
+                                    <td>{{appointment.breed}}</td>
+                                    <td>{{appointment.ownerName}}</td>
+                                    <td>{{appointment.ownerContact}}</td>
+                                    <td>{{appointment.preferredVet}}</td>
+                                    <td>{{appointment.visitReason}}</td>
+                                </tr>
+                            </table>
                         </div>
                         <div class="card-footer">PAGES</div>
                     </div>
