@@ -20,6 +20,7 @@ const app = Vue.createApp({
             currentPage: 'appointments', // {overview, appointments, vetSched, settings}
             appointmentlist: [],
             appointmentSearchTerm: '',
+            appointmentSearchTerm2: '',
             appointmentSearchFilter: 'appointmentID',
             petID_VALUE: '',
         }
@@ -32,7 +33,7 @@ const app = Vue.createApp({
     methods: {
         async fetchQuery() {
 
-            if (this.appointmentSearchTerm == "") {
+            if (this.appointmentSearchTerm == "" && this.appointmentSearchTerm2) {
                 return
             }
             try {
@@ -69,12 +70,42 @@ const app = Vue.createApp({
                         );
                         break;
                     case "createdAt":
-                        throw "Error: Not Implemented Yet."
-                        return;
+                        if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '>=', this.appointmentSearchTerm),
+                            );
+                        } else if(!this.appointmentSearchTerm && this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                            );
+                        } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '>=', this.appointmentSearchTerm),
+                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                            );
+                        }
                         break;
                     case "dateTime":
-                        throw "Error: Not Implemented Yet."
-                        return;
+                        if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '>=', this.appointmentSearchTerm),
+                            );
+                        } else if(!this.appointmentSearchTerm && this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                            );
+                        } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '>=', this.appointmentSearchTerm),
+                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                            );
+                        }
                         break;
                     // case "otherConcerns":
                     //     break;
@@ -132,8 +163,23 @@ const app = Vue.createApp({
 
                         break;
                     case "dateOfBirth":
-                        throw "Error: Not Implemented Yet."
-                        return;
+                        if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '>=', this.appointmentSearchTerm),
+                            );
+                        } else if(!this.appointmentSearchTerm && this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                            );
+                        } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
+                            q = query(
+                                collectionGroup(db, "appointments"),
+                                where('dateTime', '>=', this.appointmentSearchTerm),
+                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                            );
+                        }
                         break;
                     // case "gender":
                     //     break;

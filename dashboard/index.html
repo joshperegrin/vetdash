@@ -179,9 +179,9 @@
                                 <input v-if="(appointmentSearchFilter != 'dateTime') && (appointmentSearchFilter != 'createdAt') && (appointmentSearchFilter != 'dateOfBirth')" placeholder="Search Appointments" @change="fetchQuery()"
                                     v-model="appointmentSearchTerm" type="text" class="form-control form-control-sm">
                                 <div v-else class="input-group input-group-sm">
-                                    <input type="date" v-model="appointmentSearchTerm" class="form-control" placeholder="Username">
+                                    <input type="date" v-model="appointmentSearchTerm" class="form-control" placeholder="Username" @change="fetchQuery()">
                                     <span class="input-group-text">to</span>
-                                    <input type="date" v-model="appointmentSearchTerm" class="form-control" placeholder="Server">
+                                    <input type="date" v-model="appointmentSearchTerm2" class="form-control" placeholder="Server" @change="fetchQuery()">
                                 </div>
                                 <select v-model="appointmentSearchFilter" class="form-select-sm" style="width: 150px;"
                                     id="select-filters">
@@ -206,29 +206,24 @@
                             </div>
                         </div>
                         <div class="card-body d-flex flex-column">
-                            Search Term: "{{appointmentSearchTerm}}", "{{appointmentSearchTerm}}" <br> Search Filter: "{{appointmentSearchFilter}}"
                             <table class="table table-hover">
                                 <thead class="fw-bold">
-                                    <td>Appointment ID</td>
-                                    <td>Appointment Schedule</td>
+                                    <td>Schedule</td>
                                     <td>Status</td>
+                                    <td>Owner Name</td>
                                     <td>Pet Name</td>
                                     <td>Species</td>
                                     <td>Breed</td>
-                                    <td>Owner Name</td>
-                                    <td>Owner Contact</td>
                                     <td>Preferred Vet</td>
                                     <td>Reason of Visit</td>
                                 </thead>
                                 <tr v-for="appointment in appointmentlist">
-                                    <td>{{appointment.appointmentID}}</td>
                                     <td>{{appointment.dateTime}}</td>
                                     <td>{{appointment.status}}</td>
+                                    <td>{{appointment.ownerName}}</td>
                                     <td>{{appointment.petName}}</td>
                                     <td>{{appointment.species}}</td>
                                     <td>{{appointment.breed}}</td>
-                                    <td>{{appointment.ownerName}}</td>
-                                    <td>{{appointment.ownerContact}}</td>
                                     <td>{{appointment.preferredVet}}</td>
                                     <td>{{appointment.visitReason}}</td>
                                 </tr>
