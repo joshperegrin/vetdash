@@ -36,6 +36,7 @@ const app = Vue.createApp({
             if (this.appointmentSearchTerm == "" && this.appointmentSearchTerm2) {
                 return
             }
+
             try {
                 /**
                  * (String) appointmentID
@@ -277,6 +278,9 @@ const app = Vue.createApp({
                     gender: appointmentMap.gender,
                     petName: appointmentMap.petName,
                     species: appointmentMap.species,
+                });
+                await updateDoc(petsRef, {
+                    petID: petsRef.id
                 });
             } else {
                 petsRef = await getDoc(doc(db, "pets", appointmentMap.petID));
