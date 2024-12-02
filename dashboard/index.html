@@ -67,68 +67,68 @@
                             <div class="fs-5 mb-2"> Owner Details </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Owner Name</span>
-                                <input type="text" class="form-control" name="ownerName-Forms">
+                                <input type="text" class="form-control" ref="ownerName_Forms" name="ownerName_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Owner Email</span>
-                                <input type="text" class="form-control" name="ownerEmail-Forms">
+                                <input type="text" class="form-control" ref="ownerEmail_Forms" name="ownerEmail_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Owner Contact</span>
-                                <input type="text" class="form-control" name="ownerContact-Forms">
+                                <input type="text" class="form-control" ref="ownerContact_Forms" name="ownerContact_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Owner Address</span>
-                                <input type="text" class="form-control" name="ownerAddress-Forms">
+                                <input type="text" class="form-control" ref="ownerAddress_Forms" name="ownerAddress_Forms">
                             </div>
 
                             <br>
                             <div class="fs-5 mb-2"> Pet Details </div>
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text">Pet ID</span>
-                                <input v-model="petID_VALUE" type="text" class="form-control" name="petID-Forms">
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Name</span>
-                                <input type="text" class="form-control" name="petName-Forms" :disabled="petID_VALUE!=''">
+                                <input type="text" class="form-control" ref="petName_Forms" name="petName_Forms" :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Date of Birth</span>
-                                <input type="date" class="form-control" name="dateOfBirth-Forms" :disabled="petID_VALUE!=''">
+                                <input type="date" class="form-control" ref="dateOfBirth_Forms" name="dateOfBirth_Forms" :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Gender</span>
-                                <select class="form-select" id="inputGroupSelect01" name="gender-Forms" :disabled="petID_VALUE!=''">
+                                <select class="form-select" id="inputGroupSelect01" ref="gender_Forms" name="gender_Forms" :disabled="petID_VALUE!=''">
                                     <option value="true">Male</option>
                                     <option value="false">Female</option>
                                 </select>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Species</span>
-                                <input type="text" class="form-control" id="species-Forms" :disabled="petID_VALUE!=''">
+                                <input type="text" class="form-control" ref="species_Forms" name="species_Forms" :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Breed</span>
-                                <input type="text" class="form-control" name="breed-Forms" :disabled="petID_VALUE!=''">
+                                <input type="text" class="form-control" ref="breed_Forms" name="breed_Forms" :disabled="petID_VALUE!=''">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Pet ID</span>
+                                <input v-model="petID_VALUE" type="text" class="form-control" ref="petID_Forms" name="petID_Forms">
                             </div>
 
                             <br>
                             <div class="fs-5 mb-2"> Visit Details </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Preferred Vet</span>
-                                <input type="text" class="form-control" name="preferredVet-Forms">
+                                <input type="text" class="form-control" ref="preferredVet_Forms" name="preferredVet_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Date Schedule</span>
-                                <input type="date" class="form-control" name="dateTime-Forms">
+                                <input type="date" class="form-control" ref="dateTime_Forms" name="dateTime_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Reason for Visit</span>
-                                <input type="text" class="form-control" name="visitReason-Forms">
+                                <input type="text" class="form-control" ref="visitReason_Forms" name="visitReason_Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Status</span>
-                                <select class="form-select" name="status-Forms">
+                                <select class="form-select" ref="status_Forms" name="status_Forms">
                                     <option value="Scheduled">Scheduled</option>
                                     <option value="Completed">Completed</option>
                                     <option value="Cancelled">Cancelled</option>
@@ -138,13 +138,13 @@
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Other Concerns</span>
-                                <textarea class="form-control" name="otherConcerns-Forms"></textarea>
+                                <textarea class="form-control" ref="otherConcerns_Forms" name="otherConcerns_Forms"></textarea>
                             </div>
 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" @click="addAppointmentOnClick()">Add
+                            <button type="button" class="btn btn-primary" @click="addAppointmentOnClick()" data-bs-dismiss="modal">Add
                                 Appointment</button>
                         </div>
                     </div>

@@ -25,6 +25,10 @@ const app = Vue.createApp({
         }
     },
 
+    mounted(){
+        this.addAppointmentModalReset();
+    },
+
     methods: {
         async fetchQuery() {
 
@@ -227,6 +231,11 @@ const app = Vue.createApp({
                 });
             } else {
                 petsRef = await getDoc(doc(db, "pets", appointmentMap.petID));
+
+                if(!petsRef.exists()){
+                    throw "petID does not exist";
+                    return;
+                }
             }
 
             const appointmentRef = await addDoc(collection(db, "pets", petsRef.id, "appointments"), {
@@ -250,26 +259,48 @@ const app = Vue.createApp({
         },
 
         addAppointmentOnClick(){
-            // const appointmentMap1 = {
-            //     createdAt: new Date(2024, 11, 1),
-            //     dateTime: new Date(2024, 11, 1),
-            //     otherConcerns: "",
-            //     ownerAddress: "",
-            //     ownerContact: "",
-            //     ownerEmail: "maverinallysandrahidalgo@gmail.com",
-            //     ownerName: "mav",
-            //     preferredVet: "",
-            //     status: "",
-            //     updatedAt: "",
-            //     visitReason: "",
-            //     breed: "",
-            //     dateOfBirth: new Date(2024, 11, 1),
-            //     gender: true,
-            //     petName: "",
-            //     species: "",
-            //     petID: "",
-            // }
+            const appointmentMap1 = {
+                createdAt: new Date(),
+                dateTime: this.$refs.dateTime_Forms.value,
+                otherConcerns: this.$refs.otherConcerns_Forms.value,
+                ownerAddress: this.$refs.ownerAddress_Forms.value,
+                ownerContact: this.$refs.ownerContact_Forms.value,
+                ownerEmail: this.$refs.ownerEmail_Forms.value,
+                ownerName: this.$refs.ownerName_Forms.value,
+                preferredVet: this.$refs.preferredVet_Forms.value,
+                status: this.$refs.status_Forms.value,
+                updatedAt: new Date(),
+                visitReason: this.$refs.visitReason_Forms.value,
+                breed: this.$refs.breed_Forms.value,
+                dateOfBirth: this.$refs.dateOfBirth_Forms.value,
+                gender: this.$refs.gender_Forms.value,
+                petName: this.$refs.petName_Forms.value,
+                species: this.$refs.species_Forms.value,
+                petID: this.$refs.petID_Forms.value,
+            };
 
+            this.addAppointmentModalReset();
+
+            this.addAppointment(appointmentMap1);
+
+        },
+
+        addAppointmentModalReset(){
+            this.$refs.dateTime_Forms.value = '';
+            this.$refs.otherConcerns_Forms.value = '';
+            this.$refs.ownerAddress_Forms.value = '';
+            this.$refs.ownerContact_Forms.value = '';
+            this.$refs.ownerEmail_Forms.value = '';
+            this.$refs.ownerName_Forms.value = '';
+            this.$refs.preferredVet_Forms.value = '';
+            this.$refs.status_Forms.value = '';
+            this.$refs.visitReason_Forms.value = '';
+            this.$refs.breed_Forms.value = '';
+            this.$refs.dateOfBirth_Forms.value = '';
+            this.$refs.gender_Forms.value = '';
+            this.$refs.petName_Forms.value = '';
+            this.$refs.species_Forms.value = '';
+            this.$refs.petID_Forms.value = '';
         }
     }
 })
