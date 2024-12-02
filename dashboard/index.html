@@ -53,6 +53,103 @@
                     </button>
                 </div>
             </div>
+
+            <div class="modal fade" id="addAppointmentModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Enter Appointment Details</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="fs-5 mb-2"> Owner Details </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Owner Name</span>
+                                <input type="text" class="form-control" name="ownerName-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Owner Email</span>
+                                <input type="text" class="form-control" name="ownerEmail-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Owner Contact</span>
+                                <input type="text" class="form-control" name="ownerContact-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Owner Address</span>
+                                <input type="text" class="form-control" name="ownerAddress-Forms">
+                            </div>
+
+                            <br>
+                            <div class="fs-5 mb-2"> Pet Details </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Pet ID</span>
+                                <input type="text" class="form-control" name="petID-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Pet Name</span>
+                                <input type="text" class="form-control" name="petName-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Pet Date of Birth</span>
+                                <input type="date" class="form-control" name="dateOfBirth-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Pet Gender</span>
+                                <select class="form-select" id="inputGroupSelect01" name="gender-Forms">
+                                    <option value="2">Male</option>
+                                    <option value="3">Female</option>
+                                </select>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Pet Species</span>
+                                <input type="text" class="form-control" id="species-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Pet Breed</span>
+                                <input type="text" class="form-control" name="breed-Forms">
+                            </div>
+
+                            <br>
+                            <div class="fs-5 mb-2"> Visit Details </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Preferred Vet</span>
+                                <input type="text" class="form-control" name="preferredVet-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Date Schedule</span>
+                                <input type="date" class="form-control" name="dateTime-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Reason for Visit</span>
+                                <input type="text" class="form-control" name="visitReason-Forms">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Status</span>
+                                <select class="form-select" name="status-Forms">
+                                    <option value="Scheduled">Scheduled</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                    <option value="Rescheduled">Rescheduled</option>
+                                    <option value="Postponed">Postponed</option>
+                                </select>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text">Other Concerns</span>
+                                <textarea class="form-control" name="otherConcerns-Forms"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Add Appointment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="col d-flex flex-column mt-4 mx-4 mb-4">
                 <div v-if="currentPage=='overview'" class="d-flex flex-column">
                     <div class="h3">Overview</div>
@@ -62,10 +159,14 @@
                     <div class="fs-6 pb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, sit</div>
                     <div class="card d-flex flex-grow-1">
                         <div class="card-header d-flex flex-row justify-content-between">
-                            <button class="btn btn-outline-primary btn-sm text-nowrap" @click="addAppointmentOnClick()"> <i class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#addAppointmentModal"
+                                class="btn btn-outline-primary btn-sm text-nowrap" @click="addAppointmentOnClick()"> <i
+                                    class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
                             <div class="d-flex flex-row align-items-center gap-3">
-                                <input placeholder="Search Appointments" @change="fetchQuery()" v-model="appointmentSearchTerm" type="text" class="form-control form-control-sm">
-                                <select v-model="appointmentSearchFilter" class="form-select-sm " style="width: 150px;" id="select-filters">
+                                <input placeholder="Search Appointments" @change="fetchQuery()"
+                                    v-model="appointmentSearchTerm" type="text" class="form-control form-control-sm">
+                                <select v-model="appointmentSearchFilter" class="form-select-sm " style="width: 150px;"
+                                    id="select-filters">
                                     <option value="appointmentID">Appointment ID </option>
                                     <option value="dateTime">Date Scheduled</option>
                                     <option value="createdAt">Date Created</option>

@@ -26,7 +26,7 @@ const app = Vue.createApp({
 
     async mounted() {
         try {
-
+            
         } catch (e) {
             console.log(e)
         }
@@ -257,27 +257,26 @@ const app = Vue.createApp({
         },
 
         addAppointmentOnClick(){
-            const appointmentMap1 = {
-                createdAt: new Date(2024, 11, 1),
-                dateTime: new Date(2024, 11, 1),
-                otherConcerns: "",
-                ownerAddress: "",
-                ownerContact: "",
-                ownerEmail: "maverinallysandrahidalgo@gmail.com",
-                ownerName: "mav",
-                preferredVet: "",
-                status: "",
-                updatedAt: "",
-                visitReason: "",
-                breed: "",
-                dateOfBirth: new Date(2024, 11, 1),
-                gender: "",
-                petName: "",
-                species: "",
-                petID: "",
-            }
-
-            this.addAppointment(appointmentMap1)
+            // const appointmentMap1 = {
+            //     createdAt: new Date(2024, 11, 1),
+            //     dateTime: new Date(2024, 11, 1),
+            //     otherConcerns: "",
+            //     ownerAddress: "",
+            //     ownerContact: "",
+            //     ownerEmail: "maverinallysandrahidalgo@gmail.com",
+            //     ownerName: "mav",
+            //     preferredVet: "",
+            //     status: "",
+            //     updatedAt: "",
+            //     visitReason: "",
+            //     breed: "",
+            //     dateOfBirth: new Date(2024, 11, 1),
+            //     gender: true,
+            //     petName: "",
+            //     species: "",
+            //     petID: "",
+            // }
+            
         }
     }
 })
