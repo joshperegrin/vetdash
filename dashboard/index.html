@@ -86,30 +86,30 @@
                             <div class="fs-5 mb-2"> Pet Details </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet ID</span>
-                                <input type="text" class="form-control" name="petID-Forms">
+                                <input v-model="petID_VALUE" type="text" class="form-control" name="petID-Forms">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Name</span>
-                                <input type="text" class="form-control" name="petName-Forms">
+                                <input type="text" class="form-control" name="petName-Forms" :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Date of Birth</span>
-                                <input type="date" class="form-control" name="dateOfBirth-Forms">
+                                <input type="date" class="form-control" name="dateOfBirth-Forms" :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Gender</span>
-                                <select class="form-select" id="inputGroupSelect01" name="gender-Forms">
-                                    <option value="2">Male</option>
-                                    <option value="3">Female</option>
+                                <select class="form-select" id="inputGroupSelect01" name="gender-Forms" :disabled="petID_VALUE!=''">
+                                    <option value="true">Male</option>
+                                    <option value="false">Female</option>
                                 </select>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Species</span>
-                                <input type="text" class="form-control" id="species-Forms">
+                                <input type="text" class="form-control" id="species-Forms" :disabled="petID_VALUE!=''">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Pet Breed</span>
-                                <input type="text" class="form-control" name="breed-Forms">
+                                <input type="text" class="form-control" name="breed-Forms" :disabled="petID_VALUE!=''">
                             </div>
 
                             <br>
@@ -144,7 +144,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Add Appointment</button>
+                            <button type="button" class="btn btn-primary" @click="addAppointmentOnClick()">Add
+                                Appointment</button>
                         </div>
                     </div>
                 </div>
@@ -160,7 +161,7 @@
                     <div class="card d-flex flex-grow-1">
                         <div class="card-header d-flex flex-row justify-content-between">
                             <button type="button" data-bs-toggle="modal" data-bs-target="#addAppointmentModal"
-                                class="btn btn-outline-primary btn-sm text-nowrap" @click="addAppointmentOnClick()"> <i
+                                class="btn btn-outline-primary btn-sm text-nowrap"> <i
                                     class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
                             <div class="d-flex flex-row align-items-center gap-3">
                                 <input placeholder="Search Appointments" @change="fetchQuery()"

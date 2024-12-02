@@ -19,16 +19,9 @@ const app = Vue.createApp({
         return {
             currentPage: 'appointments', // {overview, appointments, vetSched, settings}
             appointmentlist: [],
-            appointmentSearchTerm: "",
-            appointmentSearchFilter: "appointmentID",
-        }
-    },
-
-    async mounted() {
-        try {
-            
-        } catch (e) {
-            console.log(e)
+            appointmentSearchTerm: '',
+            appointmentSearchFilter: 'appointmentID',
+            petID_VALUE: '',
         }
     },
 
@@ -276,7 +269,7 @@ const app = Vue.createApp({
             //     species: "",
             //     petID: "",
             // }
-            
+
         }
     }
 })
