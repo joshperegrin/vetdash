@@ -59,7 +59,7 @@ const app = Vue.createApp({
                  */
 
                 let q;
-
+                const isSearchBoxClear = (!this.appointmentSearchTerm && !this.appointmentSearchTerm2 && (['dateTime', 'createdAt', 'dateOfBirth'].includes(this.appointmentSearchFilter))) || (!this.appointmentSearchTerm && !(['dateTime', 'createdAt', 'dateOfBirth'].includes(this.appointmentSearchFilter)))
                 
                 switch (this.appointmentSearchFilter) {
                     case "appointmentID":
@@ -206,15 +206,10 @@ const app = Vue.createApp({
                 }
 
                 
-                if (!this.appointmentSearchTerm && !this.appointmentSearchTerm2 && (['dateTime', 'createdAt', 'dateOfBirth'].includes(this.appointmentSearchFilter))
-                   || (!this.appointmentSearchTerm && !(['dateTime', 'createdAt', 'dateOfBirth'].includes(this.appointmentSearchFilter)))) {
+                if (isSearchBoxClear) {
                     q = query(collectionGroup(db, 'appointments'), orderBy('dateTime', 'desc'), limit(12));
                 }                
-                if (this.appointmentSearchFilter == "breed"
-                    || this.appointmentSearchFilter == "dateOfBirth"
-                    || this.appointmentSearchFilter == "petName"
-                    || this.appointmentSearchFilter == "species"
-                    || this.appointmentSearchFilter == "petID") {
+                if (['breed', 'dateOfBirth', 'petName', 'species', 'petID'].includes(this.appointmentSearchFilter) && !isSearchBoxClear) {
 
                     const querySnapshot = await getDocs(q);
 
