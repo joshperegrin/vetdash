@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, collectionGroup, doc, getCountFromServer, getDoc, addDoc, updateDoc} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
+import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, collectionGroup, doc, getCountFromServer, getDoc, addDoc, updateDoc, orderBy, limit} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCn5TPno8hTc1cM-Sm9vsrzkJn6VjKTyYM",
@@ -28,15 +28,13 @@ const app = Vue.createApp({
 
     mounted(){
         this.addAppointmentModalReset();
+        this.fetchQuery();
     },
 
     methods: {
         async fetchQuery() {
 
-            if (this.appointmentSearchTerm == "" && this.appointmentSearchTerm2) {
-                return
-            }
-
+            
             try {
                 /**
                  * (String) appointmentID
@@ -62,6 +60,7 @@ const app = Vue.createApp({
 
                 let q;
 
+                
                 switch (this.appointmentSearchFilter) {
                     case "appointmentID":
                         q = query(
@@ -74,18 +73,18 @@ const app = Vue.createApp({
                         if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '>=', this.appointmentSearchTerm),
+                                where('createdAt', '>=', this.appointmentSearchTerm),
                             );
                         } else if(!this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                                where('createdAt', '<=', this.appointmentSearchTerm2)
                             );
                         } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '>=', this.appointmentSearchTerm),
-                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                                where('createdAt', '>=', this.appointmentSearchTerm),
+                                where('createdAt', '<=', this.appointmentSearchTerm2)
                             );
                         }
                         break;
@@ -169,18 +168,18 @@ const app = Vue.createApp({
                         if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '>=', this.appointmentSearchTerm),
+                                where('dateOfBirth', '>=', this.appointmentSearchTerm),
                             );
                         } else if(!this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                                where('dateOfBirth', '<=', this.appointmentSearchTerm2)
                             );
                         } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '>=', this.appointmentSearchTerm),
-                                where('dateTime', '<=', this.appointmentSearchTerm2)
+                                where('dateOfBirth', '>=', this.appointmentSearchTerm),
+                                where('dateOfBirth', '<=', this.appointmentSearchTerm2)
                             );
                         }
                         break;
@@ -206,8 +205,11 @@ const app = Vue.createApp({
                         throw "Skill Issue: No filter Selected"
                 }
 
-
-
+                
+                if (!this.appointmentSearchTerm && !this.appointmentSearchTerm2 && (['dateTime', 'createdAt', 'dateOfBirth'].includes(this.appointmentSearchFilter))
+                   || (!this.appointmentSearchTerm && !(['dateTime', 'createdAt', 'dateOfBirth'].includes(this.appointmentSearchFilter)))) {
+                    q = query(collectionGroup(db, 'appointments'), orderBy('dateTime', 'desc'), limit(12));
+                }                
                 if (this.appointmentSearchFilter == "breed"
                     || this.appointmentSearchFilter == "dateOfBirth"
                     || this.appointmentSearchFilter == "petName"
@@ -243,9 +245,9 @@ const app = Vue.createApp({
                             value['petID'] = parent.id
                             this.appointmentlist.push(value);
                         }
+                        rowsCount += countSnapshot.data().count;
                     }
 
-                    rowsCount += countSnapshot.data().count;
                 } else {
                     this.appointmentlist = [];
                     const querySnapshot = await getDocs(q);
