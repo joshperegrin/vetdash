@@ -172,9 +172,14 @@
                     <div class="fs-6 pb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, sit</div>
                     <div class="card d-flex flex-grow-1">
                         <div class="card-header d-flex flex-row justify-content-between">
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#addAppointmentModal"
-                                class="btn btn-outline-primary btn-sm text-nowrap"> <i
-                                    class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
+                            <div>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#addAppointmentModal"
+                                    class="btn btn-outline-primary btn-sm text-nowrap"> <i
+                                        class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
+                                <button class="btn btn-outline-secondary btn-sm ms-2" @click="fetchQuery()">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </button>
+                            </div>
                             <div class="d-flex flex-row align-items-center gap-3">
                                 <input v-if="(appointmentSearchFilter != 'dateTime') && (appointmentSearchFilter != 'createdAt') && (appointmentSearchFilter != 'dateOfBirth')" placeholder="Search Appointments" @change="fetchQuery()"
                                     v-model="appointmentSearchTerm" type="text" class="form-control form-control-sm">
