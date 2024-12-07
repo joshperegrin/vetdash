@@ -299,7 +299,15 @@ const app = Vue.createApp({
                 preferredVet: appointmentMap.preferredVet,
                 status: appointmentMap.status,
                 updatedAt: appointmentMap.updatedAt,
-                visitReason: appointmentMap.visitReason
+                visitReason: appointmentMap.visitReason,
+                pet: {
+                  petID: petsRef.id,
+                  breed: appointmentMap.breed,
+                  dateOfBirth: appointmentMap.dateOfBirth,
+                  gender: appointmentMap.gender,
+                  petName: appointmentMap.petName,
+                  species: appointmentMap.species,
+                }
             });
 
             await updateDoc(appointmentRef, {
