@@ -134,9 +134,9 @@ const app = Vue.createApp({
                         break;
                     case "petID":
                         q = query(
-                            collection(db, "pets"),
-                            where('petID', '>=', this.appointmentSearchTerm),
-                            where('petID', '<=', this.appointmentSearchTerm + '\uf8ff')
+                            collectionGroup(db, "appointments"),
+                            where('pet.petID', '>=', this.appointmentSearchTerm),
+                            where('pet.petID', '<=', this.appointmentSearchTerm + '\uf8ff')
                         );
                         break;
                     case "preferredVet":
@@ -158,9 +158,9 @@ const app = Vue.createApp({
                     //     break;
                     case "breed":
                         q = query(
-                            collection(db, "pets"),
-                            where('breed', '>=', this.appointmentSearchTerm),
-                            where('breed', '<=', this.appointmentSearchTerm + '\uf8ff')
+                            collectionGroup(db, "appointmets"),
+                            where('pet.breed', '>=', this.appointmentSearchTerm),
+                            where('pet.breed', '<=', this.appointmentSearchTerm + '\uf8ff')
                         );
 
                         break;
@@ -168,18 +168,18 @@ const app = Vue.createApp({
                         if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateOfBirth', '>=', this.appointmentSearchTerm),
+                                where('pet.dateOfBirth', '>=', this.appointmentSearchTerm),
                             );
                         } else if(!this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateOfBirth', '<=', this.appointmentSearchTerm2)
+                                where('pet.dateOfBirth', '<=', this.appointmentSearchTerm2)
                             );
                         } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateOfBirth', '>=', this.appointmentSearchTerm),
-                                where('dateOfBirth', '<=', this.appointmentSearchTerm2)
+                                where('pet.dateOfBirth', '>=', this.appointmentSearchTerm),
+                                where('pet.dateOfBirth', '<=', this.appointmentSearchTerm2)
                             );
                         }
                         break;
@@ -187,17 +187,17 @@ const app = Vue.createApp({
                     //     break;
                     case "petName":
                         q = query(
-                            collection(db, "pets"),
-                            where('petName', '>=', this.appointmentSearchTerm),
-                            where('petName', '<=', this.appointmentSearchTerm + '\uf8ff')
+                            collectionGroup(db, "appointments"),
+                            where('pet.petName', '>=', this.appointmentSearchTerm),
+                            where('pet.petName', '<=', this.appointmentSearchTerm + '\uf8ff')
 
                         );
                         break;
                     case "species":
                         q = query(
-                            collection(db, "pets"),
-                            where('species', '>=', this.appointmentSearchTerm),
-                            where('species', '<=', this.appointmentSearchTerm + '\uf8ff')
+                            collectionGroup(db, "appointments"),
+                            where('pet.species', '>=', this.appointmentSearchTerm),
+                            where('pet.species', '<=', this.appointmentSearchTerm + '\uf8ff')
                         );
                         break;
 
@@ -209,55 +209,9 @@ const app = Vue.createApp({
                 if (isSearchBoxClear) {
                     q = query(collectionGroup(db, 'appointments'), orderBy('dateTime', 'desc'), limit(12));
                 }                
-                if (['breed', 'dateOfBirth', 'petName', 'species', 'petID'].includes(this.appointmentSearchFilter) && !isSearchBoxClear) {
-
-                    const querySnapshot = await getDocs(q);
-
-                    let rowsCount = 0;
-                    const pageLimit = 12;
-                    this.appointmentlist = []
-
-                    for (const doc of querySnapshot.docs) {
-                        const appointmentsCollection = collection(db, "pets", doc.id, "appointments");
-                        const countSnapshot = await getCountFromServer(appointmentsCollection);
-                        let querySnapshot2;
-
-                        if (countSnapshot.data().count + rowsCount <= pageLimit) {
-                            querySnapshot2 = await getDocs(appointmentsCollection);
-                        } else if (rowsCount < pageLimit) {
-                            q = query(appointmentsCollection, orderBy("dateTime"), limit(pageLimit - rowsCount));
-                            querySnapshot2 = await getDocs(q);
-                        }
-
-                        for (const doc2 of querySnapshot2.docs) {
-                            let parent = await getDoc(doc2.ref.parent.parent);
-                            const parent_object = parent.data();
-                            let value = doc2.data();
-                            value['breed'] = parent_object.breed;
-                            value['dateOfBirth'] = parent_object.dateOfBirth;
-                            value['petName'] = parent_object.petName;
-                            value['species'] = parent_object.species;
-                            value['petID'] = parent.id
-                            this.appointmentlist.push(value);
-                        }
-                        rowsCount += countSnapshot.data().count;
-                    }
-
-                } else {
-                    this.appointmentlist = [];
-                    const querySnapshot = await getDocs(q);
-                    for (const doc of querySnapshot.docs) {
-                        let parent = await getDoc(doc.ref.parent.parent);
-                        const parent_object = parent.data();
-                        let value = doc.data();
-                        value['breed'] = parent_object.breed;
-                        value['dateOfBirth'] = parent_object.dateOfBirth;
-                        value['petName'] = parent_object.petName;
-                        value['species'] = parent_object.species;
-                        value['petID'] = parent.id
-                        this.appointmentlist.push(value);
-                    }
-                }
+                this.appointmentlist = [];
+                const querySnapshot = await getDocs(q);
+                this.appointmentlist = querySnapshot.docs.map(doc => doc.data())
 
             } catch (e) {
                 console.error(e)
