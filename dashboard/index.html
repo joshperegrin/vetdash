@@ -176,7 +176,8 @@
                 </div>
             </div>
 
-            <div class="col d-flex flex-column px-4 pb-4 pt-4" style="height: 100vh;">
+            <div v-if="currentPage=='overview'" class="col d-flex flex-column px-4 pb-4 pt-4" style="height: 100vh;"></div>
+            <div v-if="currentPage=='appointments'" class="col d-flex flex-column px-4 pb-4 pt-4" style="height: 100vh;">
                     <div class="h3">Appointments</div>
                     <div class="fs-6 pb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, sit</div>
                     <div class="card flex-grow-1 no_scrollbar" style="max-height: inherit; overflow-y: scroll;">
@@ -189,15 +190,23 @@
                                     <i class="bi bi-arrow-clockwise"></i>
                                 </button>
                             </div>
-                            <div class="d-flex flex-row align-items-center gap-3">
-                                <input v-if="(appointmentSearchFilter != 'dateTime') && (appointmentSearchFilter != 'createdAt') && (appointmentSearchFilter != 'dateOfBirth')" placeholder="Search Appointments" @change="fetchQuery()"
+                            <div class="d-flex flex-row align-items-center gap-3 justify-content-center">
+                                <input v-if="appointmentPage_view && (appointmentSearchFilter != 'dateTime') && (appointmentSearchFilter != 'createdAt') && (appointmentSearchFilter != 'dateOfBirth')" placeholder="Search Appointments" @change="fetchQuery()"
                                     v-model="appointmentSearchTerm" type="text" class="form-control form-control-sm">
-                                <div v-else class="input-group input-group-sm">
+                                <div v-else-if="appointmentPage_view" class="input-group input-group-sm">
                                     <input type="date" v-model="appointmentSearchTerm" class="form-control" placeholder="Username" @change="fetchQuery()">
                                     <span class="input-group-text">to</span>
                                     <input type="date" v-model="appointmentSearchTerm2" class="form-control" placeholder="Server" @change="fetchQuery()">
                                 </div>
-                                <select v-model="appointmentSearchFilter" class="form-select-sm" style="width: 150px;"
+                                <span v-if="!appointmentPage_view" class="justify-self-center fw-semibold mb-0">{{monthArray[appointmentPage_month]}}</span>
+                                <button v-if="!appointmentPage_view"type="button" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-arrow-up"></i>
+                                </button>
+                                <button v-if="!appointmentPage_view"type="button" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-arrow-down"></i>
+                                </button>
+                                <input v-if="!appointmentPage_view" type="number" class="form-control-sm py-0" min="1900" max="2099" step="1" value="2024" />
+                                <select v-if="appointmentPage_view" v-model="appointmentSearchFilter" class="form-select-sm" style="width: 150px;"
                                     id="select-filters">
                                     <option value="appointmentID">Appointment ID </option>
                                     <option value="dateTime">Date Scheduled</option>
@@ -215,12 +224,12 @@
                                 </select>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" role="switch"
-                                        id="switch-calendar_list">
+                                        id="switch-calendar_list" v-model='appointmentPage_view'>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body px-3 py-0" style="max-height: inherit; overflow-y: scroll;">
-                            <table class="table table-hover">
+                            <table v-if="appointmentPage_view==true"class="table table-hover">
                                 <thead class="fw-bold sticky-top" style="box-shadow: 0 4px 10px -8px LightGray; overflow-x: clip;">
                                     <tr>
                                         <th>Schedule</th>
@@ -247,6 +256,58 @@
                                 
                                 </tbody>
                             </table>
+                            <div v-if="appointmentPage_view==false" class="container-fluid h-100">
+                                <div class="row h-100">
+                                    <div class="col d-flex flex-column">
+                                        <div class="row flex-grow-1 border">
+                                            <div class="col">1</div>
+                                            <div class="col">2</div>
+                                            <div class="col">3</div>
+                                            <div class="col">4</div>
+                                            <div class="col">5</div>
+                                            <div class="col">6</div>
+                                            <div class="col">7</div>
+                                        </div>
+                                        <div class="row flex-grow-1 border">
+                                            <div class="col">8</div>
+                                            <div class="col">9</div>
+                                            <div class="col">9</div>
+                                            <div class="col">10</div>
+                                            <div class="col">11</div>
+                                            <div class="col">12</div>
+                                            <div class="col">13</div>
+                                        </div>
+                                        <div class="row flex-grow-1 border">
+                                            <div class="col">14</div>
+                                            <div class="col">15</div>
+                                            <div class="col">16</div>
+                                            <div class="col">17</div>
+                                            <div class="col">18</div>
+                                            <div class="col">19</div>
+                                            <div class="col">20</div>
+                                        </div>
+                                        <div class="row flex-grow-1 border">
+                                            <div class="col">21</div>
+                                            <div class="col">22</div>
+                                            <div class="col">23</div>
+                                            <div class="col">24</div>
+                                            <div class="col">25</div>
+                                            <div class="col">26</div>
+                                            <div class="col">27</div>
+                                        </div>
+                                        <div class="row flex-grow-1 border">
+                                            <div class="col">28</div>
+                                            <div class="col">29</div>
+                                            <div class="col">30</div>
+                                            <div class="col">31</div>
+                                            <div class="col">1</div>
+                                            <div class="col">2</div>
+                                            <div class="col">3</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
             </div>

@@ -18,11 +18,14 @@ const app = Vue.createApp({
     data() {
         return {
             currentPage: 'appointments', // {overview, appointments, vetSched, settings}
+            appointmentPage_view: true,
             appointmentlist: [],
             appointmentSearchTerm: '',
             appointmentSearchTerm2: '',
             appointmentSearchFilter: 'appointmentID',
             petID_VALUE: '',
+            monthArray: ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            appointmentPage_month: 0,
         }
     },
 
