@@ -17,21 +17,27 @@ const db = getFirestore(firebaseApp);
 const app = Vue.createApp({
     data() {
         return {
-            currentPage: 'appointments', // {overview, appointments, vetSched, settings}
-            appointmentPage_view: true,
+            currentPage: 'appointments', // {overview, appointments, vetSched,:
+            appointmentPage_view: false,
             appointmentlist: [],
+            appointmentList_Calendar: [...Array(42)].map(e => []),
             appointmentSearchTerm: '',
             appointmentSearchTerm2: '',
             appointmentSearchFilter: 'appointmentID',
             petID_VALUE: '',
             monthArray: ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             appointmentPage_month: 0,
+            appointmentPage_year: 2024,
+            appointmentPage_HeaderDates: [],
+            isSixRows: false,
+            //pogiko
         }
     },
 
     mounted(){
         this.addAppointmentModalReset();
         this.fetchQuery();
+        this.fetchCalendar(true);
     },
 
     methods: {
@@ -221,6 +227,61 @@ const app = Vue.createApp({
             }
 
         },
+
+        async fetchCalendar(onMount = false){
+            let q;
+            // monthArray: ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            // appointmentPage_month: 0, i
+            if (onMount){
+                const currentDate = new Date();
+                this.appointmentPage_month = currentDate.getMonth()
+                this.appointmentPage_year = currentDate.getFullYear()
+            }            
+            // Sunday = 0, Monday = 1, . . ., Saturday = 6
+
+            const startOfMonth = new Date(this.appointmentPage_year, this.appointmentPage_month, 1);
+            const endOfMonth = new Date(this.appointmentPage_year, this.appointmentPage_month + 1, 0, 23, 59, 59);
+            
+            let nOfDays = endOfMonth.getDate()
+            let topOffset = startOfMonth.getDay()
+
+            let bottomOffset = (42 -(nOfDays+topOffset))
+            
+            const queryStart = new Date(startOfMonth.getTime()-(topOffset*24*60*60*1000));
+            const queryEnd = new Date(endOfMonth.getTime()+(bottomOffset*24*60*60*1000));
+            q = query(
+                collectionGroup(db, "appointments"),
+                where("dateTime", ">=", queryStart),
+                where("dateTime", "<=", queryEnd),
+                orderBy("dateTime","asc")
+            )
+
+            const querySnapshot = await getDocs(q)
+            const calendarQuery = querySnapshot.docs.map(doc => doc.data())
+            console.log(calendarQuery)
+            this.appointmentList_Calendar = [...Array(42)].map(e => [])
+            for(let day of calendarQuery) {
+                console.log(day.dateTime)
+                let i = Math.floor((day.dateTime.toDate().getTime() - queryStart.getTime()) / (24*60*60*1000))
+                this.appointmentList_Calendar[i].push(day)
+            }
+            
+            this.appointmentPage_HeaderDates = []
+            for (let i = topOffset; i > 0; i--){
+                this.appointmentPage_HeaderDates.push(new Date(startOfMonth.getTime()-(86400000*i)).getDate())
+            }
+            for(let i = 1; i <= nOfDays; i++){
+                this.appointmentPage_HeaderDates.push(i)
+            }
+            for(let i = 1; i <= bottomOffset; i++){
+                this.appointmentPage_HeaderDates.push(new Date(endOfMonth.getTime()+(86400000*i)).getDate())
+            }
+
+            this.isSixRows = (bottomOffset > 7)
+            // getQuery
+            // resetCalendarRows using v-if
+            // 
+        },
         
         async addAppointment(appointmentMap){
             let petsRef;
@@ -316,6 +377,17 @@ const app = Vue.createApp({
             this.$refs.petName_Forms.value = '';
             this.$refs.species_Forms.value = '';
             this.$refs.petID_Forms.value = '';
+        },
+
+        changeMonth(isChangeUp){
+            if(isChangeUp){
+                this.appointmentPage_year = (this.appointmentPage_month == 0)? this.appointmentPage_year - 1 : this.appointmentPage_year;
+                this.appointmentPage_month  = ((this.appointmentPage_month - 1 + 12) % 12);
+            } else {
+                this.appointmentPage_year = (this.appointmentPage_month == 11)? this.appointmentPage_year + 1 : this.appointmentPage_year;
+                this.appointmentPage_month =  (this.appointmentPage_month + 1) % 12
+            }
+            this.fetchCalendar(false);
         }
     }
 })
