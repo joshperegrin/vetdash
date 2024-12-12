@@ -259,7 +259,7 @@
                             <div v-if="appointmentPage_view==false" class="container-fluid p-3 h-100">
                                 <div class="row h-100">
                                     <div class="container-fluid h-100">
-                                        <div class="row" style="height:20%">
+                                        <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[0]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[0]" class="badge rounded-pill text-bg-primary mb-1 w-100">
@@ -303,7 +303,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row" style="height:20%">
+                                        <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[7]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[7]" class="badge rounded-pill text-bg-primary mb-1 w-100">
@@ -347,7 +347,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row" style="height:20%">
+                                        <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[14]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[14]" class="badge rounded-pill text-bg-primary mb-1 w-100">
@@ -391,7 +391,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row" style="height:20%">
+                                        <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[21]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[21]" class="badge rounded-pill text-bg-primary mb-1 w-100">
@@ -435,7 +435,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row" style="height:20%">
+                                        <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[28]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[28]" class="badge rounded-pill text-bg-primary mb-1 w-100">
@@ -450,31 +450,75 @@
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[30]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[29]" class="badge rounded-pill text-bg-primary mb-1 w-100">
-                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
-                                                </div>
-                                            </div>
-                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
-                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[31]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[30]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
-                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[32]}} </div>
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[31]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[31]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
-                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[33]}} </div>
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[32]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[32]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
-                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[34]}} </div>
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[33]}} </div>
                                                 <div v-for="appointment in appointmentList_Calendar[33]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
+                                                </div>
+                                            </div>
+                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[34]}} </div>
+                                                <div v-for="appointment in appointmentList_Calendar[34]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-if="isSixRows"class="row" :style="calendarRowStyle">
+                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[35]}} </div>
+                                                <div v-for="appointment in appointmentList_Calendar[35]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
+                                                </div>
+                                            </div>
+                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[36]}} </div>
+                                                <div v-for="appointment in appointmentList_Calendar[36]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
+                                                </div>
+                                            </div>
+                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[37]}} </div>
+                                                <div v-for="appointment in appointmentList_Calendar[37]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
+                                                </div>
+                                            </div>
+                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[38]}} </div>
+                                                <div v-for="appointment in appointmentList_Calendar[38]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
+                                                </div>
+                                            </div>
+                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[39]}} </div>
+                                                <div v-for="appointment in appointmentList_Calendar[39]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
+                                                </div>
+                                            </div>
+                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[40]}} </div>
+                                                <div v-for="appointment in appointmentList_Calendar[40]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                    {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
+                                                </div>
+                                            </div>
+                                            <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
+                                                <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[41]}} </div>
+                                                <div v-for="appointment in appointmentList_Calendar[41]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>

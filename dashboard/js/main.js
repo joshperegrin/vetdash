@@ -30,7 +30,9 @@ const app = Vue.createApp({
             appointmentPage_year: 2024,
             appointmentPage_HeaderDates: [],
             isSixRows: false,
-            //pogiko
+            calendarRowStyle: {
+                height: '20%'
+            },
         }
     },
 
@@ -277,7 +279,8 @@ const app = Vue.createApp({
                 this.appointmentPage_HeaderDates.push(new Date(endOfMonth.getTime()+(86400000*i)).getDate())
             }
 
-            this.isSixRows = (bottomOffset > 7)
+            this.isSixRows = ((nOfDays+topOffset) > 35)
+            this.calendarRowStyle = (this.isSixRows)? {height: "calc(1/6*100%)"} : {height: "20%"}
             // getQuery
             // resetCalendarRows using v-if
             // 
@@ -337,7 +340,7 @@ const app = Vue.createApp({
         addAppointmentOnClick(){
             const appointmentMap1 = {
                 createdAt: new Date(),
-                dateTime: this.$refs.dateTime_Forms.value,
+                dateTime: new Date(this.$refs.dateTime_Forms.value.concat("T00:00:00")),
                 otherConcerns: this.$refs.otherConcerns_Forms.value,
                 ownerAddress: this.$refs.ownerAddress_Forms.value,
                 ownerContact: this.$refs.ownerContact_Forms.value,
@@ -348,7 +351,7 @@ const app = Vue.createApp({
                 updatedAt: new Date(),
                 visitReason: this.$refs.visitReason_Forms.value,
                 breed: this.$refs.breed_Forms.value,
-                dateOfBirth: this.$refs.dateOfBirth_Forms.value,
+                dateOfBirth: new Date(this.$refs.dateOfBirth_Forms.value.concat("T00:00:00")),
                 gender: this.$refs.gender_Forms.value,
                 petName: this.$refs.petName_Forms.value,
                 species: this.$refs.species_Forms.value,
