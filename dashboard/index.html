@@ -244,6 +244,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr v-for="appointment in appointmentlist">
                                         <td>{{appointment.dateTime.toDate().toLocaleDateString("en-ph")}}</td>
                                         <td>{{appointment.status}}</td>
                                         <td>{{appointment.ownerName}}</td>
