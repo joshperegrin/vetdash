@@ -33,6 +33,7 @@ const app = Vue.createApp({
             calendarRowStyle: {
                 height: '20%'
             },
+            vetList: [],
         }
     },
 
@@ -40,6 +41,7 @@ const app = Vue.createApp({
         this.addAppointmentModalReset();
         this.fetchQuery();
         this.fetchCalendar(true);
+        this.fetchVets()
     },
 
     methods: {
@@ -224,6 +226,8 @@ const app = Vue.createApp({
                 const querySnapshot = await getDocs(q);
                 this.appointmentlist = querySnapshot.docs.map(doc => doc.data())
 
+                console.log(this.appointmentlist.dateTime)
+                
             } catch (e) {
                 console.error(e)
             }
@@ -335,6 +339,13 @@ const app = Vue.createApp({
                 appointmentID: appointmentRef.id
             });
             
+        },
+
+        async fetchVets(){
+            const querySnapshot = await getDocs(collection(db, "vets"));
+            querySnapshot.docs.forEach(doc => {
+                this.vetList.push(doc.data());
+            });
         },
 
         addAppointmentOnClick(){

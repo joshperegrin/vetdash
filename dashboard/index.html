@@ -137,8 +137,9 @@
                             <div class="fs-5 mb-2"> Visit Details </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Preferred Vet</span>
-                                <input type="text" class="form-control" ref="preferredVet_Forms"
-                                    name="preferredVet_Forms">
+                                <select class="form-select" ref="preferredVet_Forms" name="preferredVet_Forms">
+                                    <option v-for="vet in vetList" :value="vet.vetName">{{vet.vetName}} - {{vet.expertise}}</option>
+                                </select>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">Date Schedule</span>
@@ -186,7 +187,7 @@
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#addAppointmentModal"
                                     class="btn btn-outline-primary btn-sm text-nowrap"> <i
                                         class="bi bi-plus-circle-dotted"></i> Add Appointments</button>
-                                <button class="btn btn-outline-secondary btn-sm ms-2" @click="fetchQuery()">
+                                <button class="btn btn-outline-secondary btn-sm ms-2" @click="fetchQuery(); fetchCalendar(false)">
                                     <i class="bi bi-arrow-clockwise"></i>
                                 </button>
                             </div>
@@ -243,8 +244,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="appointment in appointmentlist">
-                                        <td>{{appointment.dateTime}}</td>
+                                        <td>{{appointment.dateTime.toDate().toLocaleDateString("en-ph")}}</td>
                                         <td>{{appointment.status}}</td>
                                         <td>{{appointment.ownerName}}</td>
                                         <td>{{appointment.pet.petName}}</td>
