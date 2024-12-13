@@ -25,13 +25,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     fetchVets();
 
-    // if may pet ID
     const petIDField = document.getElementById("petID_Forms");
-    const petIDValue = petIDField.value.trim();
-    if (petIDValue) {
-        fetchPetDetails(petIDValue);
+
+    // Listen for changes to petID input field
+    if (petIDField) {
+        petIDField.addEventListener('input', () => {
+            const petIDValue = petIDField.value.trim();
+            if (petIDValue) {
+                fetchPetDetails(petIDValue);
+            }
+        });
     }
 });
+
 
 // Pangkuha nung pet details
 async function fetchPetDetails(petID) {
@@ -40,14 +46,22 @@ async function fetchPetDetails(petID) {
         const petDoc = await getDoc(petRef);
         if (petDoc.exists()) {
             const petData = petDoc.data();
-            // ilalagay yung pet details
+
+            // Set pet details
             document.getElementById("petName_Forms").value = petData.petName;
             document.getElementById("petBreed_Forms").value = petData.breed;
             document.getElementById("petSpecies_Forms").value = petData.species;
             document.getElementById("petGender_Forms").value = petData.gender;
-            document.getElementById("dateOfBirth_Forms").value = petData.dateOfBirth;
-            
-            // para di na magalaw
+
+            // Format the dateOfBirth and adjust for time zone offset
+            if (petData.dateOfBirth) {
+                const dateOfBirth = petData.dateOfBirth.toDate();
+                const adjustedDate = new Date(dateOfBirth.getTime() - dateOfBirth.getTimezoneOffset() * 60000); // Adjust time
+                const formattedDate = adjustedDate.toISOString().split('T')[0]; //yyyy-MM-dd
+                document.getElementById("dateOfBirth_Forms").value = formattedDate;
+            }
+
+            // Disable the fields so they can't be edited
             document.getElementById("petName_Forms").disabled = true;
             document.getElementById("petBreed_Forms").disabled = true;
             document.getElementById("petSpecies_Forms").disabled = true;
@@ -60,6 +74,7 @@ async function fetchPetDetails(petID) {
         console.error("Error fetching pet details:", e);
     }
 }
+
 
 async function addAppointmentOnClick(event) {
     event.preventDefault();  // Prevent form submission if inside a form
@@ -91,12 +106,6 @@ async function addAppointmentOnClick(event) {
             alert("Please fill out all fields before submitting the form.");
             return;
         }
-    }
-
-    // If petID is empty or doesn't exist, create a new pet document with a new petID
-    if (!appointmentData.petID || !await petIDExists(appointmentData.petID)) {
-        appointmentData.petID = generateRandomString(20);  //to generate new pet ID
-        console.log("Generated Pet ID:", appointmentData.petID);
     }
 
     await addAppointment(appointmentData);
@@ -164,15 +173,6 @@ async function addAppointment(appointmentData) {
         console.error("Error adding appointment:", e);
         alert("Error adding appointment. Please try again.");
     }
-}
-
-function generateRandomString(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
 }
 
 async function fetchVets() {
