@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, collectionGroup, doc, getCountFromServer, getDoc, addDoc, updateDoc, orderBy, limit} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js"
 
 const firebaseConfig = {
     apiKey: "AIzaSyCn5TPno8hTc1cM-Sm9vsrzkJn6VjKTyYM",
@@ -13,6 +14,16 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        // Redirect to login page if not logged in
+        window.location.href = "login.html";
+    } else{
+        document.getElementById('app').style.visibility = "visible";
+    }
+});
 
 const app = Vue.createApp({
     data() {
@@ -34,6 +45,9 @@ const app = Vue.createApp({
                 height: '20%'
             },
             vetList: [],
+            isLoggedIn: {
+                visibility: false
+            },
         }
     },
 
@@ -402,7 +416,14 @@ const app = Vue.createApp({
                 this.appointmentPage_month =  (this.appointmentPage_month + 1) % 12
             }
             this.fetchCalendar(false);
-        }
+        },
+        logout() {
+            signOut(auth).then(() => {
+                window.location.href = "login.html"; // Redirect to login page
+            }).catch((error) => {
+                console.error("Error signing out: ", error);
+        });
+    }
     }
 })
 
