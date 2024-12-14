@@ -19,6 +19,11 @@
         tr th {
             padding-top: 1rem !important; 
         }
+        .table_edit {
+            border-radius: 0 !important;
+            appearance: none; 
+            border: none;
+        }
     </style>
     <script></script>
 </head>
@@ -177,6 +182,127 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="updateAppointmentModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Update Appointment Details</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column px-5 pt-4">
+                            <div class="fs-5 mb-2 fw-bold"> Visit Details <i class="bi bi-pencil-square" style="font-size: 1rem;"></i></div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Appointment ID:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="appointmentID_Forms_Update" ref="appointmentID_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Appointment Date:</div>
+                                <div class="col p-0" style="">
+                                    <input ref="dateTime_Forms_Update" name="dateTime_Forms_Update" type="date" class="form-control table_edit" ref="dateTime_Forms_Update" name="dateTime_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Preferred Vet:</div>
+                                <div class="col p-0" style="">
+                                    <select class="form-select table_edit" ref="preferredVet_Forms_Update" name="preferredVet_Forms_Update">
+                                        <option v-for="vet in vetList" :value="vet.vetName">{{vet.vetName}} - {{vet.expertise}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Reason for Visit: </div>
+                                <div class="col p-0" style="">
+                                    <input type="text" class="form-control table_edit" ref="visitReason_Forms_Update"
+                                        name="visitReason_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Status: </div>
+                                <div class="col p-0" style="">
+                                    <select class="form-select table_edit" ref="status_Forms_Update" name="status_Forms_Update">
+                                        <option value="Scheduled">Scheduled</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                        <option value="Rescheduled">Rescheduled</option>
+                                        <option value="Postponed">Postponed</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="fs-5 mb-2 fw-bold">Pet Details</div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Pet Name:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="petName_Forms_Update" ref="petName_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Pet Date of Birth:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="dateOfBirth_Forms_Update" ref="dateOfBirth_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Pet Gender:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="gender_Forms_Update" ref="gender_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Pet Species:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="species_Forms_Update" ref="species_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Pet Breed:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="breed_Forms_Update" ref="breed_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Pet ID:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="petID_Forms_Update" ref="petID_Forms_Update">
+                                </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Other Concerns: </div>
+                                <div class="col p-0" style="">
+                                    <textarea class="form-control table_edit" ref="otherConcerns_Forms_Update"
+                                        name="otherConcerns_Forms"></textarea>
+                                </div>
+                            </div>
+                            <div class="fs-5 mb-2 fw-bold"> Owner Details </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Owner Name:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="ownerName_Forms_Update" ref="ownerName_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Owner Email:</div>
+                                <div class="col no_scrollbar" style="padding: .375rem .75rem; overflow-x:scroll" name="ownerEmail_Forms_Update" ref="ownerEmail_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Owner Contact:</div>
+                                <div class="col" style="padding: .375rem .75rem" name="ownerContact_Forms_Update" ref="ownerContact_Forms_Update">
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col" style="padding: .375rem .75rem">Owner Address:</div>
+                                <div class="col no_scrollbar" style="padding: .375rem .75rem overflow-x:scroll" name="ownerAddress_Forms_Update" ref="ownerAddress_Forms_Update">
+                                </div>
+                            </div>
+                            <br>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" @click="updateAppointment(); fetchQuery()"
+                                data-bs-dismiss="modal">Update
+                                Appointment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div v-if="currentPage=='overview'" class="col d-flex flex-column px-4 pb-4 pt-4" style="height: 100vh;"></div>
             <div v-if="currentPage=='appointments'" class="col d-flex flex-column px-4 pb-4 pt-4" style="height: 100vh;">
                     <div class="h3">Appointments</div>
@@ -244,7 +370,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="appointment in appointmentlist">
+                                    <tr v-for="appointment in appointmentlist" data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)">
                                         <td>{{appointment.dateTime.toDate().toLocaleDateString("en-ph")}}</td>
                                         <td>{{appointment.status}}</td>
                                         <td>{{appointment.ownerName}}</td>
@@ -263,43 +389,43 @@
                                         <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[0]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[0]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[0]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[1]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[1]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[1]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[2]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[2]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[2]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[3]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[3]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[3]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[4]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[4]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[4]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[5]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[5]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[5]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[6]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[6]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[6]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
@@ -307,43 +433,43 @@
                                         <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[7]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[7]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[7]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[8]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[8]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[8]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[9]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[9]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[9]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[10]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[10]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[10]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[11]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[11]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[11]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[12]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[12]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[12]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[13]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[13]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[13]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
@@ -351,43 +477,43 @@
                                         <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[14]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[14]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[14]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[15]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[15]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[15]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[16]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[16]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[16]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[17]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[17]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[17]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[18]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[18]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[18]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[19]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[19]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[19]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[20]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[20]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[20]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
@@ -395,43 +521,43 @@
                                         <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[21]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[21]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[21]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[22]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[22]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[22]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[23]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[23]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[23]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[24]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[24]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[24]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[25]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[25]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[25]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[26]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[26]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[26]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[27]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[27]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[27]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
@@ -439,43 +565,43 @@
                                         <div class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[28]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[28]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[28]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[29]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[29]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[29]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[30]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[30]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[30]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[31]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[31]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[31]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[32]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[32]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[32]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[33]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[33]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[33]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[34]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[34]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[34]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
@@ -483,43 +609,43 @@
                                         <div v-if="isSixRows"class="row" :style="calendarRowStyle">
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[35]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[35]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[35]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[36]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[36]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[36]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[37]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[37]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[37]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[38]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[38]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[38]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[39]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[39]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[39]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[40]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[40]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[40]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>
                                             <div class="col no_scrollbar h-100 overflow-scroll" style="overflow-x: hidden;">
                                                 <div class="w-100 sticky-top bg-white"> {{appointmentPage_HeaderDates[41]}} </div>
-                                                <div v-for="appointment in appointmentList_Calendar[41]" class="badge rounded-pill text-bg-primary mb-1 w-100">
+                                                <div data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)" v-for="appointment in appointmentList_Calendar[41]" class="badge rounded-pill text-bg-primary mb-1 w-100">
                                                     {{appointment.pet.petName}} - [{{appointment.visitReason}}] <br> {{appointment.ownerName}}'s 
                                                 </div>
                                             </div>

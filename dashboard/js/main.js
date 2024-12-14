@@ -25,11 +25,17 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+function formatDate(date){
+    const [month, day, year] = date.split("/");
+    const reorderedDate = `${year}-${month}-${day}`
+    return reorderedDate;
+}
+
 const app = Vue.createApp({
     data() {
         return {
             currentPage: 'appointments', // {overview, appointments, vetSched,:
-            appointmentPage_view: false,
+            appointmentPage_view: true,
             appointmentlist: [],
             appointmentList_Calendar: [...Array(42)].map(e => []),
             appointmentSearchTerm: '',
@@ -238,9 +244,12 @@ const app = Vue.createApp({
                 }                
                 this.appointmentlist = [];
                 const querySnapshot = await getDocs(q);
-                this.appointmentlist = querySnapshot.docs.map(doc => doc.data())
-
-                console.log(this.appointmentlist.dateTime)
+                console.log(querySnapshot.docs)
+                for (const doc of querySnapshot.docs){
+                    let row = doc.data()
+                    row['appointmentID'] = doc.id
+                    this.appointmentlist.push(row)
+                }
                 
             } catch (e) {
                 console.error(e)
@@ -277,8 +286,12 @@ const app = Vue.createApp({
             )
 
             const querySnapshot = await getDocs(q)
-            const calendarQuery = querySnapshot.docs.map(doc => doc.data())
-            console.log(calendarQuery)
+            let calendarQuery = [];
+            for (const doc of querySnapshot.docs){
+                let row = doc.data()
+                row['appointmentID'] = doc.id
+                calendarQuery.push(row)
+            }
             this.appointmentList_Calendar = [...Array(42)].map(e => [])
             for(let day of calendarQuery) {
                 console.log(day.dateTime)
@@ -407,6 +420,38 @@ const app = Vue.createApp({
             this.$refs.petID_Forms.value = '';
         },
 
+        async openAppointmentDetailsModal(value){
+            console.log(value)
+            this.$refs.appointmentID_Forms_Update.innerHTML = value.appointmentID;
+            this.$refs.dateTime_Forms_Update.value = formatDate(value.dateTime.toDate().toLocaleDateString("en-ph", { year: "numeric", month: "2-digit", day: "2-digit", }))
+            this.$refs.preferredVet_Forms_Update.value = value.preferredVet;
+            this.$refs.visitReason_Forms_Update.value = value.visitReason;
+            this.$refs.status_Forms_Update.value = value.status;
+            this.$refs.otherConcerns_Forms_Update.value = value.otherConcerns;
+            this.$refs.ownerAddress_Forms_Update.innerHTML = value.ownerAddress;
+            this.$refs.ownerContact_Forms_Update.innerHTML = value.ownerContact;
+            this.$refs.ownerEmail_Forms_Update.innerHTML = value.ownerEmail;
+            this.$refs.ownerName_Forms_Update.innerHTML = value.ownerName;
+            this.$refs.breed_Forms_Update.innerHTML = value.pet.breed;
+            this.$refs.dateOfBirth_Forms_Update.innerHTML = value.pet.dateOfBirth.toDate().toLocaleDateString("en-ph")
+            this.$refs.gender_Forms_Update.innerHTML = (value.pet.gender)? "Male":"Female";
+            this.$refs.petName_Forms_Update.innerHTML = value.pet.petName;
+            this.$refs.species_Forms_Update.innerHTML = value.pet.species;
+            this.$refs.petID_Forms_Update.innerHTML = value.pet.petID;
+        },
+
+        async updateAppointment(){
+            const updateValues = {
+                dateTime: new Date(this.$refs.dateTime_Forms_Update.value.concat("T00:00:00")),
+                visitReason: this.$refs.preferredVet_Forms_Update.value,
+                status: this.$refs.visitReason_Forms_Update.value,
+                otherConcerns: this.$refs.otherConcerns_Forms_Update.value
+            }
+            const appointmentsRef = await getDocs(query(collectionGroup(db, "appointments"), where('appointmentID', '>=', this.$refs.appointmentID_Forms_Update.innerHTML), where('appointmentID', '<=', this.$refs.appointmentID_Forms_Update.innerHTML + '\uf8ff')))
+                        
+            await updateDoc(appointmentsRef.docs[0].ref, updateValues);
+        },
+        
         changeMonth(isChangeUp){
             if(isChangeUp){
                 this.appointmentPage_year = (this.appointmentPage_month == 0)? this.appointmentPage_year - 1 : this.appointmentPage_year;
