@@ -443,9 +443,10 @@ const app = Vue.createApp({
         async updateAppointment(){
             const updateValues = {
                 dateTime: new Date(this.$refs.dateTime_Forms_Update.value.concat("T00:00:00")),
-                visitReason: this.$refs.preferredVet_Forms_Update.value,
-                status: this.$refs.visitReason_Forms_Update.value,
-                otherConcerns: this.$refs.otherConcerns_Forms_Update.value
+                visitReason: this.$refs.visitReason_Forms_Update.value,
+                status: this.$refs.status_Forms_Update.value,
+                otherConcerns: this.$refs.otherConcerns_Forms_Update.value,
+                preferredVet: this.$refs.preferredVet_Forms_Update.value
             }
             const appointmentsRef = await getDocs(query(collectionGroup(db, "appointments"), where('appointmentID', '>=', this.$refs.appointmentID_Forms_Update.innerHTML), where('appointmentID', '<=', this.$refs.appointmentID_Forms_Update.innerHTML + '\uf8ff')))
                         
