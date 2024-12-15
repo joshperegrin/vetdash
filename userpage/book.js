@@ -147,7 +147,7 @@ async function addAppointment(appointmentData) {
             console.log("New pet added:", petsRef.id);
             await updateDoc(petsRef, { petID: petsRef.id });
         } else {
-            petsRef = await doc(db, "pets", appointmentData.petID);
+            petsRef = doc(db, "pets", appointmentData.petID);
             const petDoc = await getDoc(petsRef);
             if (!petDoc.exists()) {
                 throw new Error("Pet ID does not exist");
@@ -176,6 +176,10 @@ async function addAppointment(appointmentData) {
                 species: appointmentData.species
             }
         });
+
+        // Update with appoinment ID
+        await updateDoc(appointmentRef, { appointmentID: appointmentRef.id });
+        console.log("Appointment added with ID:", appointmentRef.id);
 
         alert("Appointment added successfully!");
 
