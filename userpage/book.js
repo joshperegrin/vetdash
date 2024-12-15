@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Listen for changes to petID input field
     if (petIDField) {
-        petIDField.addEventListener('input', () => {
+        petIDField.addEventListener('change', () => {
             const petIDValue = petIDField.value.trim();
             if (petIDValue) {
                 fetchPetDetails(petIDValue);
