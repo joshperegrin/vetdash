@@ -33,6 +33,18 @@ document.addEventListener('DOMContentLoaded', function () {
             const petIDValue = petIDField.value.trim();
             if (petIDValue) {
                 fetchPetDetails(petIDValue);
+            } else {
+                document.getElementById("petName_Forms").value = "";
+                document.getElementById("petBreed_Forms").value = "";
+                document.getElementById("petSpecies_Forms").value = "";
+                document.getElementById("petGender_Forms").value = "";
+
+                document.getElementById("petName_Forms").disabled = false;
+                document.getElementById("petBreed_Forms").disabled = false;
+                document.getElementById("petSpecies_Forms").disabled = false;
+                document.getElementById("petGender_Forms").disabled = false;
+                document.getElementById("dateOfBirth_Forms").disabled = false;
+
             }
         });
     }
