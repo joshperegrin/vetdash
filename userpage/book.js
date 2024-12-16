@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getDocs } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-import { getFirestore, collection, addDoc, updateDoc, doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import { query, where, getCountFromServer, getFirestore, collection, addDoc, updateDoc, doc, getDoc, collectionGroup } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCn5TPno8hTc1cM-Sm9vsrzkJn6VjKTyYM",
@@ -15,6 +15,72 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
+let availability = new Array(28);
+const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const appointmentLimit = 7;
+let selectedDate;
+
+
+async function constructDatePicker() {
+    // fill the availability for the array
+
+    //make sure that this equals 28
+    selectedDate = null;
+    const currentDate = new Date(new Date().setHours(0, 0, 0, 0));
+    const startDate =  new Date(currentDate.getTime() - (currentDate.getDay()*24*60*60*1000));
+    const endDate = new Date(startDate.getTime() + (27*24*60*60*1000)); 
+
+    
+
+    document.getElementById("month_label").innerHTML = `${monthArray[startDate.getMonth()]} ${startDate.getFullYear()} - ${monthArray[endDate.getMonth()]} ${endDate.getFullYear()}`
+    
+    let q;
+    let snapshot;
+    let date_i;
+    let date_j;
+    const vetRef = await getDoc(doc(db, "vets", document.getElementById("preferredVet_Forms").value));
+    for (let i = 0; i <= 27; i++){
+        date_i = new Date(startDate.getTime() + ((i)*24*60*60*1000))
+        date_j = new Date(startDate.getTime() + ((i+1)*24*60*60*1000))
+        const vetDropdown = document.getElementById("preferredVet_Forms")
+        q = query(
+            collectionGroup(db, "appointments"), 
+            where("dateTime", ">=", date_i),
+            where("dateTime", "<=", date_j),
+            where("preferredVet", "==", vetDropdown.value))
+        snapshot = await getCountFromServer(q)
+        
+        document.getElementById("calendar_picker_".concat(`${i}`)).classList.remove("calendar_picker_unavailable")
+        document.getElementById("calendar_picker_".concat(`${i}`)).classList.remove("calendar_picker_fullybooked")
+        document.getElementById("calendar_picker_".concat(`${i}`)).classList.remove("calendar_picker_available")
+        document.getElementById("calendar_picker_".concat(`${i}`)).classList.remove("calendar_picker_picked")
+        document.getElementById("calendar_picker_".concat(`${i}`)).disabled = false;
+        selectedDate = null;
+        console.log(snapshot.data().count);
+        if(!vetRef.get('schedule').includes(date_i.getDay())) { // not available
+            document.getElementById("calendar_picker_".concat(`${i}`)).classList.add("calendar_picker_unavailable")
+            document.getElementById("calendar_picker_".concat(`${i}`)).disabled = true;
+        } else if (snapshot.data().count >= appointmentLimit) { // fully booked
+            document.getElementById("calendar_picker_".concat(`${i}`)).classList.add("calendar_picker_fullybooked")
+            document.getElementById("calendar_picker_".concat(`${i}`)).disabled = true;
+        } else if (snapshot.data().count < appointmentLimit) { // available
+            document.getElementById("calendar_picker_".concat(`${i}`)).classList.add("calendar_picker_available")
+        }
+        document.getElementById("calendar_picker_".concat(`${i}`)).innerHTML = date_i.getDate()
+        availability[i] = date_i;
+        //query the specific date of i
+        // query count
+        // if more than or equal limit, then unavailable = set to disabled and red
+        // 
+    }
+
+    
+
+    
+    // construct the calendar
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const addButton = document.getElementById('addAppointmentBtn');
     if (addButton) {
@@ -24,7 +90,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     fetchVets();
-
+    window.selectDate = function (n){
+        if (selectedDate){
+            document.getElementById("calendar_picker_".concat(`${availability.indexOf(selectedDate)}`)).classList.remove("calendar_picker_picked")
+            document.getElementById("calendar_picker_".concat(`${availability.indexOf(selectedDate)}`)).classList.add("calendar_picker_available")
+        }
+        document.getElementById("calendar_picker_".concat(`${n}`)).classList.add("calendar_picker_picked")
+        selectedDate = availability[n];
+    }
+    window.constructDatePicker = constructDatePicker;
     const petIDField = document.getElementById("petID_Forms");
 
     // Listen for changes to petID input field
@@ -93,7 +167,7 @@ async function addAppointmentOnClick(event) {
 
     const appointmentData = {
         createdAt: new Date(),
-        dateTime: new Date(document.getElementById("dateTime_Forms")?.value.concat("T00:00:00")),
+        dateTime: selectedDate,//new Date(document.getElementById("dateTime_Forms")?.value.concat("T00:00:00"))
         ownerName: document.getElementById("ownerName_Forms")?.value,
         ownerEmail: document.getElementById("ownerEmail_Forms")?.value,
         ownerContact: document.getElementById("ownerContact_Forms")?.value,
@@ -125,6 +199,9 @@ async function addAppointmentOnClick(event) {
 
 // Check if the pet ID already exists in the database
 async function petIDExists(petID) {
+    if(petID.length == 0 || !petID){
+        return false;
+    }
     const petRef = doc(db, "pets", petID);
     const petDoc = await getDoc(petRef);
     return petDoc.exists();
@@ -180,7 +257,7 @@ async function addAppointment(appointmentData) {
         alert("Appointment added successfully!");
 
         clearFormFields();
-
+        document.location.href = "./index.html";
     } catch (e) {
         console.error("Error adding appointment:", e);
         alert("Error adding appointment. Please try again.");
@@ -197,13 +274,17 @@ async function fetchVets() {
             return;
         }
 
+        let toggle_select = true;
         querySnapshot.docs.forEach(doc => {
             const vetData = doc.data();
             const option = document.createElement("option");
             option.value = vetData.vetName; // Use vetName as the value
             option.textContent = `${vetData.vetName} - ${vetData.expertise}`;
+            option.selected = toggle_select;
+            toggle_select = false;
             selectElement.appendChild(option);
         });
+        constructDatePicker();
     } catch (error) {
         console.error("Error loading vets:", error);
         alert("Error loading vets. Please check the console for details.");
@@ -226,6 +307,9 @@ function clearFormFields() {
     document.getElementById("visitReason_Forms").value = '';
     document.getElementById("otherConcerns_Forms").value = '';
 
+    document.getElementById("calendar_picker_".concat(`${availability.indexOf(selectedDate)}`)).classList.remove("calendar_picker_picked")
+    document.getElementById("calendar_picker_".concat(`${availability.indexOf(selectedDate)}`)).classList.add("calendar_picker_available")
+    selectedDate = null;
     document.getElementById("petName_Forms").disabled = false;
     document.getElementById("petBreed_Forms").disabled = false;
     document.getElementById("petSpecies_Forms").disabled = false;

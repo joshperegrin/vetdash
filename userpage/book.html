@@ -101,12 +101,53 @@
         <form>
           <div class="mb-3 mx-5">
             <label for="preferredVet" class="form-label">Preferred Vet</label>
-            <select class="form-control" id="preferredVet_Forms" name="preferredVet_Forms">
+            <select class="form-control" id="preferredVet_Forms" name="preferredVet_Forms" onchange="constructDatePicker()">
           </select>
           </div>
-          <div class="calendar mb-3 mx-5">
-            <label for="dateTime" class="form-label">Schedule</label>
-            <input type="date" class="form-control" id="dateTime_Forms" name="dateTime_Forms">
+          <div>
+            <div class="container-fluid"style="height: auto; width: 400px;">
+              <div class="text-center mb-2">Select Schedule</div>
+              
+              <div id="month_label" class="fs-6 text-center"></div>
+              <div class="container-fluid p-3" style="height: 250px; width: 350px;">
+                <div class="row h-25">
+                  <div class="col p-1"><button type="button" id="calendar_picker_0" onclick="selectDate(0)" class="w-100 h-100"> 1 </button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_1" onclick="selectDate(1)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_2" onclick="selectDate(2)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_3" onclick="selectDate(3)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_4" onclick="selectDate(4)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_5" onclick="selectDate(5)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_6" onclick="selectDate(6)" class="w-100 h-100"></button></div>
+                </div>
+                <div class="row h-25">
+                  <div class="col p-1"><button type="button" id="calendar_picker_7" onclick="selectDate(7)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_8" onclick="selectDate(8)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_9" onclick="selectDate(9)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_10" onclick="selectDate(10)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_11" onclick="selectDate(11)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_12" onclick="selectDate(12)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_13" onclick="selectDate(13)" class="w-100 h-100"></button></div>
+                </div>
+                <div class="row h-25">
+                  <div class="col p-1"><button type="button" id="calendar_picker_14" onclick="selectDate(14)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_15" onclick="selectDate(15)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_16" onclick="selectDate(16)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_17" onclick="selectDate(17)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_18" onclick="selectDate(18)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_19" onclick="selectDate(19)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_20" onclick="selectDate(20)" class="w-100 h-100"></button></div>
+                </div>
+                <div class="row h-25">
+                  <div class="col p-1"><button type="button" id="calendar_picker_21" onclick="selectDate(21)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_22" onclick="selectDate(22)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_23" onclick="selectDate(23)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_24" onclick="selectDate(24)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_25" onclick="selectDate(25)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_26" onclick="selectDate(26)" class="w-100 h-100"></button></div>
+                  <div class="col p-1"><button type="button" id="calendar_picker_27" onclick="selectDate(27)" class="w-100 h-100"></button></div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="mb-3 mx-5">
             <label for="visitReason" class="form-label">Reason for Visit</label>
