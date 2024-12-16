@@ -224,7 +224,7 @@ async function addAppointment(appointmentData) {
             console.log("New pet added:", petsRef.id);
             await updateDoc(petsRef, { petID: petsRef.id });
         } else {
-            petsRef = doc(db, "pets", appointmentData.petID);
+            petsRef = doc(db, "pets", petsRef.petID);
             const petDoc = await getDoc(petsRef);
             if (!petDoc.exists()) {
                 throw new Error("Pet ID does not exist");
@@ -296,7 +296,6 @@ async function fetchVets() {
 }
 
 function clearFormFields() {
-    document.getElementById("dateTime_Forms").value = '';
     document.getElementById("ownerName_Forms").value = '';
     document.getElementById("ownerEmail_Forms").value = '';
     document.getElementById("ownerContact_Forms").value = '';
