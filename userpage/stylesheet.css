@@ -3,7 +3,74 @@ body {
     background-color: white;
     padding-top: 70px;
 }
+.calendar_picker_available {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+  color: #0F0F0F;
+  border: none;
+  border-radius: 10px;
+  width: 200px;
+  height: 40px;
+  transition: 0.3s;
+  background-color: #c5f0c8;
+}
 
+.calendar_picker_available:hover {
+  opacity: .7;
+}
+
+.calendar_picker_unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+  color: #0F0F0F;
+  border: none;
+  border-radius: 10px;
+  width: 200px;
+  height: 40px;
+}
+
+.calendar_picker_fullybooked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+  color: #0F0F0F;
+  border: none;
+  border-radius: 10px;
+  width: 200px;
+  height: 40px;
+  transition: 0.3s;
+  background-color: #ff8178;
+}
+
+.calendar_picker_fullybooked:hover {
+  opacity: .7;
+}
+.calendar_picker_picked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+  color: #0F0F0F;
+  border: none;
+  border-radius: 10px;
+  width: 200px;
+  height: 40px;
+  transition: 0.3s;
+  background-color: #a1d0ff;
+}
+
+.calendar_picker_picked:hover {
+  opacity: .7;
+}
 .navbar {
     background-color: #f5f5f5;
     height: 60px;
