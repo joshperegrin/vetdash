@@ -107,7 +107,12 @@
           <div>
             <div class="container-fluid"style="height: auto; width: 400px;">
               <div class="text-center mb-2">Select Schedule</div>
-              
+              <div class="mb-3 text-center">
+                <span class="badge bg-secondary text-light mx-1">No Color - Unavailable</span>
+                <span class="badge bg-danger text-light mx-1">Red - Fully Booked</span>
+                <span class="badge bg-success text-light mx-1">Green - Available</span>
+                <span class="badge bg-primary text-light mx-1">Blue - Chosen Date</span>
+              </div>
               <div id="month_label" class="fs-6 text-center"></div>
               <div class="container-fluid p-3" style="height: 250px; width: 350px;">
                 <div class="row h-25">
@@ -151,7 +156,15 @@
           </div>
           <div class="mb-3 mx-5">
             <label for="visitReason" class="form-label">Reason for Visit</label>
-            <input type="text" class="form-control" id="visitReason_Forms" name="visitReason_Forms" placeholder="Enter Reason for Visit">
+            <select class="form-control" id="visitReason_Forms" name="visitReason_Forms" placeholder="Enter Reason for Visit">
+              <option value="Consultation and Checkup">Consultation and Checkup</option>
+              <option value="Vaccination and Deworming">Vaccination and Deworming</option>
+              <option value="Pet Grooming">Pet Grooming</option>
+              <option value="Pet Boarding">Pet Boarding</option>
+              <option value="Ultrasound">Ultrasound</option>
+              <option value="Digital X-ray">Digital X-ray</option>
+              <option value="Laser Therapy">Laser Therapy</option>
+            </select>
           </div>
           <div class="mb-3 mx-5">
             <label for="otherConcerns" class="form-label">Other Concerns</label>
