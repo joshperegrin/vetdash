@@ -76,6 +76,10 @@
             : "N/A";
 
 
+////////////////////////////////////////
+
+
+            
             //schedule 
         const schedule = appointmentData.dateTime?.seconds
             ? new Date(appointmentData.dateTime.seconds * 1000).toLocaleDateString("en-US",{ // dd/mm/yyyy format
@@ -84,6 +88,14 @@
             year: "numeric", 
     })
             :"N/A";
+
+         
+
+///////////////////////// TEST 
+
+
+
+
 
         // Format gender
         console.log("Full petData object:", petData);
@@ -110,6 +122,55 @@
 
         document.getElementById("status").innerText = appointmentData.status || "N/A";
 
+///////////////////
+
+
+
+// Handle if no past appointments exist
+const historyContainer = document.getElementById("historyContainer");
+historyContainer.innerHTML = ""; // Clear previous results
+
+if (appointmentSnapshot.empty) {
+    historyContainer.innerHTML = "<p>No past appointments found for this Pet ID.</p>";
+    return;
+}
+
+// Iterate through all past appointments
+appointmentSnapshot.docs.forEach((doc) => {
+    const appointmentData = doc.data();
+    const appointmentID = doc.id;
+
+    // Format appointment date
+    const appointmentDate = appointmentData.dateTime?.seconds
+        ? new Date(appointmentData.dateTime.seconds * 1000).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+          })
+        : "N/A";
+
+    
+    const appointmentCard = document.createElement("div");
+    appointmentCard.classList.add("appointment-card", "border", "p-3", "mb-3");
+
+    appointmentCard.innerHTML = `
+     
+        <p><strong>Date:</strong> ${appointmentDate}</p>
+        <p><strong>Preferred Vet:</strong> ${appointmentData.preferredVet || "N/A"}</p>
+        <p><strong>Reason for Visit:</strong> ${appointmentData.visitReason || "N/A"}</p>
+        <p><strong>Other Concerns:</strong> ${appointmentData.otherConcerns || "N/A"}</p>
+       
+    `;
+
+    // Append the card to the history container
+    historyContainer.appendChild(appointmentCard);
+});
+
+
+
+
+
+        ///////////////
 
         console.log("All details updated successfully.");
     } catch (error) {
