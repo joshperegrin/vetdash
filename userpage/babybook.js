@@ -98,22 +98,17 @@
 
 
         // Format gender
-        console.log("Full petData object:", petData);
+       console.log("Full petData object:", petData);
 
         //FIX THIS 
         
-        let genderElement = document.getElementById("petgender_Forms"); // Correct the ID here
-        if (genderElement) {
-            genderElement.innerText = petData.gender ? "Male" : "Female";
-        } else {
-            console.error("Element with ID 'genderElement' not found in the DOM.");
-        }
+        
         
         // Update UI elements
         document.getElementById("ownerName_Forms").innerText = appointmentData.ownerName || "N/A";
         document.getElementById("petName_Forms").innerText = petData.petName || "N/A";
         document.getElementById("dateOfBirth_Forms").innerText = dateOfBirth || "N/A";
-        document.getElementById("petGender_Forms").innerText = petData.gender || "N/A";
+        document.getElementById("petGender_Forms").innerText = petData.gender ? "Male" : "Female" || "N/A";
         document.getElementById("petSpecies_Forms").innerText = petData.species || "N/A";
         document.getElementById("petBreed_Forms").innerText = petData.breed || "N/A";
         document.getElementById("preferredVet_Forms").innerText = appointmentData.preferredVet || "N/A";
