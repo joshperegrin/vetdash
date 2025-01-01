@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, setDoc, collectionGroup, doc, getCountFromServer, getDoc, addDoc, updateDoc, orderBy, limit} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
+import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, setDoc, collectionGroup, doc, getCountFromServer, getDoc, deleteDoc, addDoc, updateDoc, orderBy, limit} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js"
 import { customAlphabet } from "https://cdnjs.cloudflare.com/ajax/libs/nanoid/5.0.9/index.browser.js"
 
@@ -456,6 +456,11 @@ const app = Vue.createApp({
             const appointmentsRef = await getDocs(query(collectionGroup(db, "appointments"), where('appointmentID', '>=', this.$refs.appointmentID_Forms_Update.innerHTML), where('appointmentID', '<=', this.$refs.appointmentID_Forms_Update.innerHTML + '\uf8ff')))
                         
             await updateDoc(appointmentsRef.docs[0].ref, updateValues);
+        },
+
+        async deleteAppointment(){
+            const appointmentsRef = await getDocs(query(collectionGroup(db, "appointments"), where('appointmentID', '>=', this.$refs.appointmentID_Forms_Update.innerHTML), where('appointmentID', '<=', this.$refs.appointmentID_Forms_Update.innerHTML + '\uf8ff')))
+            await deleteDoc(appointmentsRef.docs[0].ref)
         },
         
         changeMonth(isChangeUp){
