@@ -39,7 +39,7 @@
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto gap-3">
                     <li>
-                        <button @click="currentPage='overview'" class="nav-link text-white fs-6">
+                        <button @click="currentPage='today'; fetchToday()" class="nav-link text-white fs-6">
                             <i class="bi bi-grid me-2"></i>
                             Today
                         </button>
@@ -51,7 +51,7 @@
                         </button>
                     </li>
                     <li>
-                        <button @click="currentPage='vetSched'" class="nav-link text-white fs-6">
+                        <button @click="currentPage='reports'" class="nav-link text-white fs-6">
                             <i class="bi bi-person-check-fill me-2"></i>
                             Reports
                         </button>
@@ -299,9 +299,37 @@
             </div>
 
 
-            <div v-if="currentPage=='overview'" class="col d-flex flex-column px-4 pb-4 pt-4" style="height: 100vh;"></div>
+            <div v-if="currentPage=='today'" class="col d-flex flex-column px-4 pb-4 pt-4" style="height: 100vh;">
+                <div class="h3">Appointments Today</div>
+                <div class="fs-6 pb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, sit</div>
+                <div class="fs-6 pb-3"><strong><em>Total Appointments Today</em></strong>: {{totalAptToday}}</div>
+                <table v-if="appointmentPage_view==true"class="table table-hover">
+                    <thead class="fw-bold sticky-top" style="box-shadow: 0 4px 10px -8px LightGray; overflow-x: clip;">
+                        <tr>
+                            <th>Status</th>
+                            <th>Owner Name</th>
+                            <th>Pet Name</th>
+                            <th>Species</th>
+                            <th>Breed</th>
+                            <th>Preferred Vet</th>
+                            <th>Reason of Visit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="appointment in appointmentlistToday" data-bs-toggle="modal" data-bs-target="#updateAppointmentModal" @click="openAppointmentDetailsModal(appointment)">
+                            <td>{{appointment.status}}</td>
+                            <td>{{appointment.ownerName}}</td>
+                            <td>{{appointment.pet.petName}}</td>
+                            <td>{{appointment.pet.species}}</td>
+                            <td>{{appointment.pet.breed}}</td>
+                            <td>{{appointment.preferredVet}}</td>
+                            <td>{{appointment.visitReason}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div v-if="currentPage=='appointments'" class="col d-flex flex-column px-4 pb-4 pt-4" style="height: 100vh;">
-                    <div class="h3">Appointments</div>
+                    <div class="h3">Appointments Database</div>
                     <div class="fs-6 pb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, sit</div>
                     <div class="card flex-grow-1 no_scrollbar" style="max-height: inherit; overflow-y: scroll;">
                         <div class="card-header d-flex flex-row justify-content-between">

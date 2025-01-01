@@ -36,9 +36,11 @@ function formatDate(date){
 const app = Vue.createApp({
     data() {
         return {
-            currentPage: 'appointments', // {overview, appointments, vetSched,:
+            totalAptToday: -1,
+            currentPage: 'appointments', // {today, appointments, reports,:
             appointmentPage_view: true,
             appointmentlist: [],
+            appointmentlistToday: [],
             appointmentList_Calendar: [...Array(42)].map(e => []),
             appointmentSearchTerm: '',
             appointmentSearchTerm2: '',
@@ -64,6 +66,7 @@ const app = Vue.createApp({
         this.fetchQuery();
         this.fetchCalendar(true);
         this.fetchVets()
+        this.fetchToday()
     },
 
     methods: {
@@ -264,6 +267,28 @@ const app = Vue.createApp({
 
         },
 
+        async fetchToday(){
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const q = query(
+                collectionGroup(db, "appointments"),
+                where('pet.dateOfBirth', '==', today ),
+                orderBy('dateTime', 'desc')
+            );
+            
+            this.appointmentlistToday = [];
+            const querySnapshot = await getDocs(q);
+            console.log(querySnapshot.docs)
+            this.totalAptToday = 0;
+            for (const doc of querySnapshot.docs){
+                let row = doc.data()
+                row['appointmentID'] = doc.id
+                this.appointmentlistToday.push(row)
+                this.totalAptToday++;
+            }
+            console.log(appointmentlistToday)
+        },
+        
         async fetchCalendar(onMount = false){
             let q;
             // monthArray: ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
