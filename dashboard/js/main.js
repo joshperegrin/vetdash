@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, collectionGroup, doc, getCountFromServer, getDoc, addDoc, updateDoc, orderBy, limit} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
+import { getFirestore, collection, onSnapshot, query, where, Timestamp, getDocs, setDoc, collectionGroup, doc, getCountFromServer, getDoc, addDoc, updateDoc, orderBy, limit} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js'
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js"
+import { customAlphabet } from "https://cdnjs.cloudflare.com/ajax/libs/nanoid/5.0.9/index.browser.js"
 
 const firebaseConfig = {
     apiKey: "AIzaSyCn5TPno8hTc1cM-Sm9vsrzkJn6VjKTyYM",
@@ -15,7 +16,6 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
-
 onAuthStateChanged(auth, (user) => {
     if (!user) {
         // Redirect to login page if not logged in
@@ -24,6 +24,8 @@ onAuthStateChanged(auth, (user) => {
         document.getElementById('app').style.visibility = "visible";
     }
 });
+
+const nanoid = customAlphabet('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
 
 function formatDate(date){
     const [month, day, year] = date.split("/");
@@ -216,7 +218,6 @@ const app = Vue.createApp({
                         } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('pet.dateOfBirth', '>=', new Date(this.appointmentSearchTerm)),
                                 where('pet.dateOfBirth', '<=', new Date(this.appointmentSearchTerm2)),
                                 orderBy('dateTime', 'desc')
                             );
@@ -325,17 +326,18 @@ const app = Vue.createApp({
         
         async addAppointment(appointmentMap){
             let petsRef;
+            
+            const generatedPetID = "PET-"+nanoid();
+            const generatedAptID = "APT-"+nanoid();
 
             if(appointmentMap.petID == "" || !appointmentMap.petID){
-                petsRef = await addDoc(collection(db, "pets"), {
+                petsRef = await setDoc(doc(db, "pets", generatedPetID), {
+                    petID: generatedPetID,
                     breed: appointmentMap.breed,
                     dateOfBirth: appointmentMap.dateOfBirth,
                     gender: appointmentMap.gender,
                     petName: appointmentMap.petName,
                     species: appointmentMap.species,
-                });
-                await updateDoc(petsRef, {
-                    petID: petsRef.id
                 });
             } else {
                 petsRef = await getDoc(doc(db, "pets", appointmentMap.petID));
@@ -346,7 +348,8 @@ const app = Vue.createApp({
                 }
             }
 
-            const appointmentRef = await addDoc(collection(db, "pets", petsRef.id, "appointments"), {
+            const appointmentRef = await setDoc(doc(db, "pets", generatedPetID, "appointments", generatedAptID), {
+                appointmentID: generatedAptID,
                 createdAt: appointmentMap.createdAt,
                 dateTime: appointmentMap.dateTime,
                 otherConcerns: appointmentMap.otherConcerns,
@@ -359,7 +362,7 @@ const app = Vue.createApp({
                 updatedAt: appointmentMap.updatedAt,
                 visitReason: appointmentMap.visitReason,
                 pet: {
-                  petID: petsRef.id,
+                  petID: generatedPetID,
                   breed: appointmentMap.breed,
                   dateOfBirth: appointmentMap.dateOfBirth,
                   gender: appointmentMap.gender,
@@ -368,10 +371,6 @@ const app = Vue.createApp({
                 }
             });
 
-            await updateDoc(appointmentRef, {
-                appointmentID: appointmentRef.id
-            });
-            
         },
 
         async fetchVets(){
