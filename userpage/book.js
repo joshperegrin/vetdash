@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getDocs } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-import { query, where, getCountFromServer, getFirestore, collection, addDoc, updateDoc, doc, getDoc, collectionGroup } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-
+import { query, where, getCountFromServer, getFirestore, collection, addDoc, updateDoc, doc, getDoc, setDoc, collectionGroup } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import { customAlphabet } from "https://cdnjs.cloudflare.com/ajax/libs/nanoid/5.0.9/index.browser.js"
 const firebaseConfig = {
     apiKey: "AIzaSyCn5TPno8hTc1cM-Sm9vsrzkJn6VjKTyYM",
     authDomain: "vet-appointment-3a67a.firebaseapp.com",
@@ -20,6 +20,7 @@ const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep
 const appointmentLimit = 7;
 let selectedDate;
 
+const nanoid = customAlphabet('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
 
 async function constructDatePicker() {
     // fill the availability for the array
@@ -211,29 +212,39 @@ async function petIDExists(petID) {
 async function addAppointment(appointmentData) {
     try {
         let petsRef;
+        const generatedPetID = "PET-" + nanoid();
+        const generatedAptID = "APT-" + nanoid();
 
         // If petID is new, add a new pet document
         if (!await petIDExists(appointmentData.petID)) {
-            petsRef = await addDoc(collection(db, "pets"), {
+            const petRef = doc(db, "pets", generatedPetID);
+            await setDoc(petRef, {
+                petID: generatedPetID,
                 breed: appointmentData.petBreed,
                 dateOfBirth: appointmentData.dateOfBirth,
                 gender: appointmentData.gender,
                 petName: appointmentData.petName,
                 species: appointmentData.species,
             });
-            console.log("New pet added:", petsRef.id);
-            appointmentData.petID = petsRef.id; // Update petID in appointment data
-            await updateDoc(petsRef, { petID: petsRef.id }); // Add petID field
+
+            console.log("New pet added:", petRef.id); // Log the pet ID to confirm creation
+            petsRef = petRef; // Store the pet reference for later use
         } else {
+            // If pet ID exists, fetch pet details
             petsRef = doc(db, "pets", appointmentData.petID);
             const petDoc = await getDoc(petsRef);
+
             if (!petDoc.exists()) {
-                throw new Error("Pet ID does not exist");
+                console.error("Pet ID does not exist in the database.");
+                return; // Stop execution if pet does not exist
             }
+            console.log("Pet details fetched:", petDoc.data());
         }
 
-        // Add appointment for the pet
-        const appointmentRef = await addDoc(collection(db, "pets", petsRef.id, "appointments"), {
+        // Create appointment record
+        const appointmentRef = doc(db, "pets", petsRef.id, "appointments", generatedAptID);
+        await setDoc(appointmentRef, {
+            appointmentID: generatedAptID,
             createdAt: appointmentData.createdAt,
             dateTime: appointmentData.dateTime,
             otherConcerns: appointmentData.otherConcerns,
@@ -255,10 +266,8 @@ async function addAppointment(appointmentData) {
             }
         });
 
-        // Update with appointment ID
-        await updateDoc(appointmentRef, { appointmentID: appointmentRef.id });
+        // Log and alert on success
         console.log("Appointment added with ID:", appointmentRef.id);
-
         alert("Appointment added successfully!");
 
         clearFormFields();
