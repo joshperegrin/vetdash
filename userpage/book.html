@@ -55,7 +55,7 @@
           </div>
           <div class="mb-3 mx-5">
             <label for="ownerContact" class="form-label">Contact Number</label>
-            <input type="text" class="form-control" id="ownerContact_Forms" name="ownerContact_Forms" placeholder="Enter contact number">
+            <input type="text" class="form-control" id="ownerContact_Forms" name="ownerContact_Forms" placeholder="Enter contact number" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
           </div>
           <div class="mb-3 mx-5">
             <label for="ownerAddress" class="form-label">Address</label>
