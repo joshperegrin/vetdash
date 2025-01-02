@@ -33,11 +33,12 @@ function formatDate(date){
     return reorderedDate;
 }
 
+
 const app = Vue.createApp({
     data() {
         return {
             totalAptToday: -1,
-            currentPage: 'appointments', // {today, appointments, reports,:
+            currentPage: 'today', // {today, appointments, reports,:
             appointmentPage_view: true,
             appointmentlist: [],
             appointmentlistToday: [],
@@ -67,6 +68,7 @@ const app = Vue.createApp({
         this.fetchCalendar(true);
         this.fetchVets()
         this.fetchToday()
+        
     },
 
     methods: {
@@ -503,8 +505,18 @@ const app = Vue.createApp({
                 window.location.href = "login.html"; // Redirect to login page
             }).catch((error) => {
                 console.error("Error signing out: ", error);
-        });
-    }
+            });
+        },
+
+        updateReportsPage(){
+            const dateToday = new Date();
+            dateToday.setHours(0, 0, 0, 0);
+            this.$refs.dailyReport_select.value = formatDate(dateToday.toLocaleDateString("en-ph", { year: "numeric", month: "2-digit", day: "2-digit", }))
+            const year = dateToday.getFullYear(); // Get the full year (e.g., 2025)
+            const month = (dateToday.getMonth() + 1).toString().padStart(2, '0'); // Get the month and pad it to 2 digits (e.g., 01, 12)
+
+            this.$refs.monthlyReport_select.value = `${year}-${month}`; // Set value in YYYY-MM format
+        }
     }
 })
 
