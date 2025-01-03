@@ -16,6 +16,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
+let URI;
 onAuthStateChanged(auth, (user) => {
     if (!user) {
         // Redirect to login page if not logged in
@@ -33,6 +34,306 @@ function formatDate(date){
     return reorderedDate;
 }
 
+
+async function fetchReportDate(date){
+    const q = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '==', date ),
+        orderBy('dateTime', 'desc')
+    );
+    
+    let reportList = [];
+    let totalAppointments = 0;
+    let totalComplete = 0;
+    let totalCancelled = 0;
+    let totalConsultAndCheckup = 0;
+    let totalVaccAndDeworming = 0;
+    let totalPetGrooming = 0;
+    let totalPetBoarding = 0;
+    let totalUltrasound = 0;
+    let totalDigitalXRay = 0;
+    let totalLaserTherapy = 0;
+
+    let vetWorkload = {}
+    
+    const querySnapshot = await getDocs(q);
+    for (const doc of querySnapshot.docs){
+        let row = doc.data()
+        
+        totalAppointments++;
+        totalComplete += (row.status == "Completed")? 1 : 0;
+        totalCancelled += (row.status == "Cancelled")? 1 : 0;
+        
+        totalConsultAndCheckup += (row.visitReason == "Consultation and Checkup")? 1 : 0;
+        totalVaccAndDeworming += (row.visitReason == "Vaccination and Deworming")? 1 : 0;
+        totalPetGrooming += (row.visitReason == "Pet Grooming")? 1 : 0;
+        totalPetBoarding += (row.visitReason == "Pet Boarding")? 1 : 0;
+        totalUltrasound += (row.visitReason == "Ultrasound")? 1 : 0;
+        totalDigitalXRay += (row.visitReason == "Digital X-Ray")? 1 : 0;
+        totalLaserTherapy += (row.visitReason == "Laser Therapy")? 1 : 0;
+        
+        if (row.preferredVet in vetWorkload){
+            vetWorkload[row.preferredVet] += 1;
+        } else {
+            vetWorkload[row.preferredVet] = 1;
+        }
+        
+        row['appointmentID'] = doc.id
+        reportList.push(row)
+        
+    }
+    return {
+        reportList,
+        totalAppointments,
+        totalComplete,
+        totalCancelled,
+        totalConsultAndCheckup,
+        totalVaccAndDeworming,
+        totalPetGrooming,
+        totalPetBoarding,
+        totalUltrasound,
+        totalDigitalXRay,
+        totalLaserTherapy,
+        vetWorkload
+    } 
+}
+
+
+async function fetchReportMonth(date){
+    debugger;    
+    let appointmentPage_month = date.getMonth()
+    let appointmentPage_year = date.getFullYear()
+    // Sunday = 0, Monday = 1, . . ., Saturday = 6
+
+    const startOfMonth = new Date(appointmentPage_year, appointmentPage_month, 1);
+    const endOfMonth = new Date(appointmentPage_year, appointmentPage_month + 1, 0, 23, 59, 59);
+    
+    
+    const canvas = document.createElement('canvas');
+    canvas.width = 400; // Set canvas dimensions
+    canvas.height = 200;
+    
+    // Get the 2D context for Chart.js
+    const ctx = canvas.getContext('2d');
+
+    const functionn = async (input) => {
+        const q = query(
+            collectionGroup(db, "appointments"),
+            where('dateTime', '==', new Date(input) ),
+            orderBy('dateTime', 'desc')
+        );
+        const a = await getCountFromServer(q)
+        return a.data().count;
+    }
+    
+    let xaxis = [];
+    let datapoints = [];
+    const datecursor = new Date(startOfMonth);
+    for (let i=1; i<= endOfMonth.getDate(); i++){
+        xaxis.push(String(i));
+        let count = await functionn(datecursor.setDate(i))
+        datapoints.push(count || 0)
+    }
+    
+    console.log(xaxis)
+    console.log(datapoints)
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data:{
+            labels: xaxis,
+            datasets: [{
+                label: 'Monthly Appointments',
+                data: datapoints,
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                legend: { display: true },
+            },
+            scales: {
+                x: { title: { display: true, text: 'Days' } },
+                y: { min: 0, max: 25, title: { display: true, text: 'Appointments' }, ticks: { stepSize: 1} }
+            },
+            animation: {
+                duration: 0,
+                onComplete: () => {
+                    URI = canvas.toDataURL('image/png'),
+                    console.log(URI+ "+"+ " d"); // Verify the generated image URL
+                }
+            }
+        }
+    });
+    
+    
+    const qtotalAppointments = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalComplete = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('status', '==', "Completed"),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalCancelled = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('status', '==', "Cancelled"),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalConsultAndCheckup = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('visitReason', '==', 'Consultation and Checkup'),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalVaccAndDeworming = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('visitReason', '==', 'Vaccination and Deworming'),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalPetGrooming = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('visitReason', '==', 'Pet Grooming'),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalPetBoarding = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('visitReason', '==', 'Pet Boarding'),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalUltrasound = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('visitReason', '==', 'Ultrasound'),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalDigitalXRay = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('visitReason', '==', 'Digital X-Ray'),
+        orderBy('dateTime', 'desc')
+    );
+    const qtotalLaserTherapy = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('visitReason', '==', 'Laser Therapy'),
+        orderBy('dateTime', 'desc')
+    );
+
+    
+    
+    const qDrAraDiaz = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('preferredVet', '==', 'Dr. Ara Diaz'),
+        orderBy('dateTime', 'desc')
+    );
+    const qDrJoshuaGarcia = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('preferredVet', '==', 'Dr. Joshua Garcia'),
+        orderBy('dateTime', 'desc')
+    );
+    const qDrLeoDelaCruz = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('preferredVet', '==', 'Dr. Leo Dela Cruz'),
+        orderBy('dateTime', 'desc')
+    );
+    const qDrSherylReyes = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('preferredVet', '==', 'Dr. Sheryl Reyes'),
+        orderBy('dateTime', 'desc')
+    );
+    const qDrTashaLim = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('preferredVet', '==', 'Dr. Tasha Lim'),
+        orderBy('dateTime', 'desc')
+    );
+    const qDrThriCruz = query(
+        collectionGroup(db, "appointments"),
+        where('dateTime', '>=', startOfMonth ),
+        where('dateTime', '<=', endOfMonth ),
+        where('preferredVet', '==', 'Dr. Thri Cruz'),
+        orderBy('dateTime', 'desc')
+    );
+    
+    
+    const stotalAppointments = await getCountFromServer(qtotalAppointments);
+    const stotalComplete = await getCountFromServer(qtotalComplete);
+    const stotalCancelled = await getCountFromServer(qtotalCancelled);
+    const stotalConsultAndCheckup = await getCountFromServer(qtotalConsultAndCheckup);
+    const stotalVaccAndDeworming = await getCountFromServer(qtotalVaccAndDeworming);
+    const stotalPetGrooming = await getCountFromServer(qtotalPetGrooming);
+    const stotalPetBoarding = await getCountFromServer(qtotalPetBoarding);
+    const stotalUltrasound = await getCountFromServer(qtotalUltrasound);
+    const stotalDigitalXRay = await getCountFromServer(qtotalDigitalXRay);
+    const stotalLaserTherapy = await getCountFromServer(qtotalLaserTherapy);
+    
+    const sDrAraDiaz = await getCountFromServer(qDrAraDiaz); 
+    const sDrJoshuaGarcia = await getCountFromServer(qDrJoshuaGarcia); 
+    const sDrLeoDelaCruz = await getCountFromServer(qDrLeoDelaCruz); 
+    const sDrSherylReyes = await getCountFromServer(qDrSherylReyes); 
+    const sDrTashaLim = await getCountFromServer(qDrTashaLim); 
+    const sDrThriCruz = await getCountFromServer(qDrThriCruz); 
+    
+    let totalAppointments = stotalAppointments.data().count;
+    let totalComplete = stotalComplete.data().count;
+    let totalCancelled = stotalCancelled.data().count;
+    let totalConsultAndCheckup = stotalConsultAndCheckup.data().count;
+    let totalVaccAndDeworming = stotalVaccAndDeworming.data().count;
+    let totalPetGrooming = stotalPetGrooming.data().count;
+    let totalPetBoarding = stotalPetBoarding.data().count;
+    let totalUltrasound = stotalUltrasound.data().count;
+    let totalDigitalXRay = stotalDigitalXRay.data().count;
+    let totalLaserTherapy = stotalLaserTherapy.data().count;
+
+    let vetWorkload = {}
+    vetWorkload["Dr. Ara Diaz"] = sDrAraDiaz.data().count; 
+    vetWorkload["Dr. Joshua Garcia"] = sDrJoshuaGarcia.data().count; 
+    vetWorkload["Dr. Leo Dela Cruz"] = sDrLeoDelaCruz.data().count; 
+    vetWorkload["Dr. Sheryl Reyes"] = sDrSherylReyes.data().count; 
+    vetWorkload["Dr. Tasha Lim"] = sDrTashaLim.data().count; 
+    vetWorkload["Dr. Thri Cruz"] = sDrThriCruz.data().count; 
+    
+    return {
+        datapoints,
+        totalAppointments,
+        totalComplete,
+        totalCancelled,
+        totalConsultAndCheckup,
+        totalVaccAndDeworming,
+        totalPetGrooming,
+        totalPetBoarding,
+        totalUltrasound,
+        totalDigitalXRay,
+        totalLaserTherapy,
+        vetWorkload
+    } 
+}
 
 const app = Vue.createApp({
     data() {
@@ -516,6 +817,244 @@ const app = Vue.createApp({
             const month = (dateToday.getMonth() + 1).toString().padStart(2, '0'); // Get the month and pad it to 2 digits (e.g., 01, 12)
 
             this.$refs.monthlyReport_select.value = `${year}-${month}`; // Set value in YYYY-MM format
+        },
+        
+        async generateDailyReport(){
+            
+            const date = new Date(this.$refs.dailyReport_select.value)
+            date.setHours(0, 0, 0, 0);
+            const data = await fetchReportDate(date);
+            
+            let vetTable = [];
+            for(const [key, value] of Object.entries(data.vetWorkload)){
+                vetTable.push([String(key), String(value)]);
+            }
+            
+            let appointmentList = [];
+            for (const appointment of data.reportList){
+                appointmentList.push([
+                    String(appointment.status),
+                    String(appointment.ownerName),
+                    String(appointment.pet.petName),
+                    String(appointment.pet.species),
+                    String(appointment.pet.breed),
+                    String(appointment.preferredVet),
+                    String(appointment.visitReason)
+                ])
+                
+            }
+            appointmentList.unshift([
+                "Status",
+                "Owner Name",
+                "Pet Name",
+                "Species",
+                "Breed",
+                "Preferred Vet",
+                "Reason of Visit"
+             ])
+            
+            var dd = {
+                content: [
+                    {
+                        columns: [
+                            {
+                                width: "*",
+                                text: "VetDash Clinic - Manila"
+                            },
+                            {
+                                width: "*",
+                                text: `Date of Report: ${date.toLocaleDateString('en-ph', { year: 'numeric', month: 'long', day: '2-digit' })}`,
+                                alignment: "right"
+                            }
+                        ],
+                        margin: [0, 0, 0, 20]
+                    },
+                    "Daily Overview",
+                    {
+                        table:{
+                            widths: [ "*", "auto"],
+                            body: [
+                                ["Total Number of Appointments", String(data.totalAppointments)],
+                                ["Total Completed", String(data.totalComplete)],
+                                ["Total Cancelled", String(data.totalCancelled)]
+                            ]
+                        },
+                        margin: [0, 0, 0, 20]
+                    },
+                    {
+                        columns: [
+                            {
+                                stack:[
+                                    "Breakdown by Appointment Type",
+                                    {
+                                        table:{
+                                            widths: [ "*", "auto"],
+                                            body: [
+                                                ["Consultation and Checkup", String(data.totalConsultAndCheckup)],
+                                                ["Vaccination and Deworming", String(data.totalVaccAndDeworming)],
+                                                ["Pet Grooming", String(data.totalPetGrooming)],
+                                                ["Pet Boarding", String(data.totalPetBoarding)],
+                                                ["Ultrasound", String(data.totalUltrasound)],
+                                                ["Digital X-Ray", String(data.totalDigitalXRay)],
+                                                ["Laser Therapy", String(data.totalLaserTherapy)]
+                                            ]
+                                        }
+                                    },
+                                ],
+                                margin: [0, 0, 10, 0]
+                            },
+                            {
+                                stack:[
+                                    "Staff Workload",
+                                    {
+                                        table:{
+                                            widths: [ "*", "auto"],
+                                            body: vetTable
+                                        }
+                                    }                                    
+                                ]
+                            },
+                        ],//lmao
+                        margin: [0, 0, 0, 20]
+                    },
+                    "Appointment List",
+                    {
+                        table:{
+                            headerRows: 1,
+                            widths: [ "*", "*", "*", "*", "*", "*", "*" ],
+                            body: appointmentList
+                        }
+                    }
+                ]
+            }
+
+            pdfMake.createPdf(dd).open()
+    
+        },
+        
+        async generateMonthlyReport(){
+            
+            const date = new Date(this.$refs.monthlyReport_select.value)
+            date.setHours(0, 0, 0, 0);
+            const data = await fetchReportMonth(date);
+            
+            let vetTable = [];
+            for(const [key, value] of Object.entries(data.vetWorkload)){
+                vetTable.push([String(key), String(value)]);
+            }
+            
+            let aptTrendTable = []
+            for(let i = 0; i < data.datapoints.length; i++){
+                aptTrendTable.push([String(`${this.monthArray[date.getMonth()]} ${i+1}`), String(data.datapoints[i])]);
+            }
+            
+            const aptTrendTable1 = aptTrendTable.slice(0, 12)
+            const aptTrendTable2 = aptTrendTable.slice(12, 24)
+            const aptTrendTable3 = aptTrendTable.slice(24)
+            
+            var dd = {
+                content: [
+                    {
+                        columns: [
+                            {
+                                width: "*",
+                                text: "VetDash Clinic - Manila"
+                            },
+                            {
+                                width: "*",
+                                text: `Month of Report: ${date.toLocaleDateString('en-ph', { year: 'numeric', month: 'long' })}`,
+                                alignment: "right"
+                            }
+                        ],
+                        margin: [0, 0, 0, 20]
+                    },
+                    "Daily Overview",
+                    {
+                        table:{
+                            widths: [ "*", "auto"],
+                            body: [
+                                ["Total Number of Appointments", String(data.totalAppointments)],
+                                ["Total Completed", String(data.totalComplete)],
+                                ["Total Cancelled", String(data.totalCancelled)]
+                            ]
+                        },
+                        margin: [0, 0, 0, 20]
+                    },
+                    {
+                        columns: [
+                            {
+                                stack:[
+                                    "Breakdown by Appointment Type",
+                                    {
+                                        table:{
+                                            widths: [ "*", "auto"],
+                                            body: [
+                                                ["Consultation and Checkup", String(data.totalConsultAndCheckup)],
+                                                ["Vaccination and Deworming", String(data.totalVaccAndDeworming)],
+                                                ["Pet Grooming", String(data.totalPetGrooming)],
+                                                ["Pet Boarding", String(data.totalPetBoarding)],
+                                                ["Ultrasound", String(data.totalUltrasound)],
+                                                ["Digital X-Ray", String(data.totalDigitalXRay)],
+                                                ["Laser Therapy", String(data.totalLaserTherapy)]
+                                            ]
+                                        }
+                                    },
+                                ],
+                                margin: [0, 0, 10, 0]
+                            },
+                            {
+                                stack:[
+                                    "Staff Workload",
+                                    {
+                                        table:{
+                                            widths: [ "*", "auto"],
+                                            body: vetTable
+                                        }
+                                    }                                    
+                                ]
+                            },
+                        ],//lmao
+                        margin: [0, 0, 0, 20]
+                    },
+                    {
+                        image:URI + "",
+                        width: 400,
+                        alignment: 'center'
+                    },
+                    {
+                        text: "Appointment Trend Graph",
+                        alignment: 'center',
+                        margin: [0, 0, 0, 5]
+                    },
+                    {text:"Appointment Trend Table",margin: [0, 0, 0, 3]},
+                    {
+                        columns: [
+                            {
+                                table:{
+                                    widths: [ "*", "auto"],
+                                    body: aptTrendTable1
+                                },
+                                margin: [0, 0, 10, 0]
+                            },
+                            {
+                                table:{
+                                    widths: [ "*", "auto"],
+                                    body: aptTrendTable2
+                                },
+                                margin: [0, 0, 10, 0]
+                            },
+                            {
+                                table:{
+                                    widths: [ "*", "auto"],
+                                    body: aptTrendTable3
+                                },
+                            },
+                        ]
+                    },
+                ]
+            }
+            pdfMake.createPdf(dd).open()
+    
         }
     }
 })

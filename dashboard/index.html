@@ -690,7 +690,7 @@
                             <p class="mb-2">Lorem ipsum odor amet, consectetuer adipiscing elit. Hac mauris ridiculus nascetur; facilisis neque lobortis.</p>
                             <div class="mt-auto">
                                 <input type="date" class="col form-control mb-2" ref="dailyReport_select">
-                                <button href="#" class="col btn btn-primary w-100">Generate Report</button>
+                                <button @click="generateDailyReport()" class="col btn btn-primary w-100">Generate Report</button>
                             </div>
                         </div>
                     </div>
@@ -700,7 +700,7 @@
                             <p class="mb-2">Lorem ipsum odor amet, consectetuer adipiscing elit. Hac mauris ridiculus nascetur; facilisis neque lobortis.</p>
                             <div class="mt-auto">
                                 <input type="month" class="col form-control mb-2" ref="monthlyReport_select">
-                                <button href="#" class="col btn btn-primary w-100">Generate Report</button>
+                                <button @click="generateMonthlyReport()" class="col btn btn-primary w-100">Generate Report</button>
                             </div>
                         </div>
                     </div>                    
@@ -712,6 +712,9 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.12/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.12/vfs_fonts.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="./js/main.js"></script>
 
 </body>
