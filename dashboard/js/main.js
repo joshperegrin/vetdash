@@ -414,19 +414,19 @@ const app = Vue.createApp({
                         if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('createdAt', '>=', new Date(this.appointmentSearchTerm)),
+                                where('createdAt', '>=', new Date(this.appointmentSearchTerm.concat("T00:00:00"))),
                             );
                         } else if(!this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('createdAt', '<=', new Date(this.appointmentSearchTerm2)),
+                                where('createdAt', '<=', new Date(this.appointmentSearchTerm2.concat("T00:00:00"))),
                                 orderBy('dateTime', 'desc')
                             );
                         } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('createdAt', '>=', new Date(this.appointmentSearchTerm)),
-                                where('createdAt', '<=', new Date(this.appointmentSearchTerm2)),
+                                where('createdAt', '>=', new Date(this.appointmentSearchTerm.concat("T00:00:00"))),
+                                where('createdAt', '<=', new Date(this.appointmentSearchTerm2.concat("T00:00:00"))),
                                 orderBy('dateTime', 'desc')
                             );
                         }
@@ -435,19 +435,19 @@ const app = Vue.createApp({
                         if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '>=', new Date(this.appointmentSearchTerm)),
+                                where('dateTime', '>=', new Date(this.appointmentSearchTerm.concat("T00:00:00"))),
                             );
                         } else if(!this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '<=', new Date(this.appointmentSearchTerm2)),
+                                where('dateTime', '<=', new Date(this.appointmentSearchTerm2.concat("T00:00:00"))),
                                 orderBy('dateTime', 'desc')
                             );
                         } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('dateTime', '>=', new Date(this.appointmentSearchTerm)),
-                                where('dateTime', '<=', new Date(this.appointmentSearchTerm2)),
+                                where('dateTime', '>=', new Date(this.appointmentSearchTerm.concat("T00:00:00"))),
+                                where('dateTime', '<=', new Date(this.appointmentSearchTerm2.concat("T00:00:00"))),
                                 orderBy('dateTime', 'desc')
                             );
                         }
@@ -513,18 +513,18 @@ const app = Vue.createApp({
                         if(this.appointmentSearchTerm && !this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('pet.dateOfBirth', '>=', new Date(this.appointmentSearchTerm)),
+                                where('pet.dateOfBirth', '>=', new Date(this.appointmentSearchTerm.concat("T00:00:00"))),
                             );
-                        } else if(!this.appointmentSearchTerm && new Date(this.appointmentSearchTerm2)){
+                        } else if(!this.appointmentSearchTerm && new Date(this.appointmentSearchTerm2.concat("T00:00:00"))){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('pet.dateOfBirth', '<=', new Date(this.appointmentSearchTerm2)),
+                                where('pet.dateOfBirth', '<=', new Date(this.appointmentSearchTerm2.concat("T00:00:00"))),
                                 orderBy('dateTime', 'desc')
                             );
                         } else if(this.appointmentSearchTerm && this.appointmentSearchTerm2){
                             q = query(
                                 collectionGroup(db, "appointments"),
-                                where('pet.dateOfBirth', '<=', new Date(this.appointmentSearchTerm2)),
+                                where('pet.dateOfBirth', '<=', new Date(this.appointmentSearchTerm2.concat("T00:00:00"))),
                                 orderBy('dateTime', 'desc')
                             );
                         }
