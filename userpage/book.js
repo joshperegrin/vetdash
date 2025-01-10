@@ -58,7 +58,8 @@ async function constructDatePicker() {
         document.getElementById("calendar_picker_".concat(`${i}`)).disabled = false;
         selectedDate = null;
         console.log(snapshot.data().count);
-        if(!vetRef.get('schedule').includes(date_i.getDay())) { // not available
+        
+        if(!vetRef.get('schedule').includes(date_i.getDay()) || currentDate > date_i) { // not available
             document.getElementById("calendar_picker_".concat(`${i}`)).classList.add("calendar_picker_unavailable")
             document.getElementById("calendar_picker_".concat(`${i}`)).disabled = true;
         } else if (snapshot.data().count >= appointmentLimit) { // fully booked
@@ -67,6 +68,7 @@ async function constructDatePicker() {
         } else if (snapshot.data().count < appointmentLimit) { // available
             document.getElementById("calendar_picker_".concat(`${i}`)).classList.add("calendar_picker_available")
         }
+
         document.getElementById("calendar_picker_".concat(`${i}`)).innerHTML = date_i.getDate()
         availability[i] = date_i;
         //query the specific date of i
