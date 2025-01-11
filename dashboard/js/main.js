@@ -575,7 +575,7 @@ const app = Vue.createApp({
             today.setHours(0, 0, 0, 0);
             const q = query(
                 collectionGroup(db, "appointments"),
-                where('pet.dateOfBirth', '==', today ),
+                where('dateTime', '==', today ),
                 orderBy('dateTime', 'desc')
             );
             
